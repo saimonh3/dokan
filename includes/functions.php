@@ -402,8 +402,7 @@ if ( !function_exists( 'dokan_get_seller_earnings_by_order' ) ) {
  * @return int $earned
  */
 function dokan_get_seller_earnings_by_order( $order, $seller_id ) {
-
-        $earned = $order->get_total() - dokan_get_admin_commission_by( $order, $seller_id );
+        $earned = $order->get_total() - ( $order->get_total_shipping() + $order->get_total_tax() + dokan_get_admin_commission_by( $order, $seller_id ) );
         return apply_filters( 'dokan_get_seller_earnings_by_order', $earned, $order, $seller_id );
     }
 }
