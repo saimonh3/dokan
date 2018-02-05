@@ -590,10 +590,10 @@ function dokan_sync_order_table( $order_id ) {
         $order_total = $order_total - $order->get_total_refunded();
     }
 
-    $order_status   = dokan_get_prop( $order, 'status' );
+    $order_status       = dokan_get_prop( $order, 'status' );
     $admin_commission   = dokan_get_admin_commission_by( $order, $seller_id );
     $net_amount         = $order_total - $admin_commission;
-    $net_amount     = apply_filters( 'dokan_sync_order_net_amount', $net_amount, $order );
+    $net_amount         = apply_filters( 'dokan_sync_order_net_amount', $net_amount, $order );
 
     // make sure order status contains "wc-" prefix
     if ( stripos( $order_status, 'wc-' ) === false ) {
