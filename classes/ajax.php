@@ -736,4 +736,3 @@ class Dokan_Ajax {
     }
 
 }
-

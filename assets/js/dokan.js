@@ -1333,7 +1333,7 @@ jQuery(function($) {
                         $( 'input[type=submit]' ).attr( 'disabled', 'disabled' );
                     }
                 }
-            } ); 
+            } );
 
         } ).trigger('keyup');
 
@@ -2003,4 +2003,8 @@ jQuery(function($) {
         }
     });
 
+})(jQuery);
+
+;(function($e) {
+    
 })(jQuery);

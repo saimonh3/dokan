@@ -316,6 +316,7 @@ final class WeDevs_Dokan {
         require_once $inc_dir . 'class-vendor-manager.php';
         require_once $inc_dir . 'class-order-manager.php';
         require_once $inc_dir . 'class-product-manager.php';
+        require_once $inc_dir . 'class-shipping-tracking.php';
 
         if ( is_admin() ) {
             require_once $inc_dir . 'admin/class-settings.php';
@@ -345,19 +346,20 @@ final class WeDevs_Dokan {
             new Dokan_Setup_Wizard();
         }
 
-        $this->container['pageview']      = new Dokan_Pageviews();
-        $this->container['rewrite']       = new Dokan_Rewrites();
-        $this->container['tracker']       = new Dokan_Tracker();
-        $this->container['seller_wizard'] = new Dokan_Seller_Setup_Wizard();
-        $this->container['core']          = new Dokan_Core();
-        $this->container['scripts']       = new Dokan_Assets();
-        $this->container['email']         = Dokan_Email::init();
-        $this->container['vendor']        = new Dokan_Vendor_Manager();
-        $this->container['product']       = new Dokan_Product_Manager();
-        $this->container['shortcode']     = new Dokan_Shortcodes();
-        $this->container['registration']  = new Dokan_Registration();
-        $this->container['orders']        = new Dokan_Order_Manager();
-        $this->container['api']           = new Dokan_API_Manager();
+        $this->container['pageview']          = new Dokan_Pageviews();
+        $this->container['rewrite']           = new Dokan_Rewrites();
+        $this->container['tracker']           = new Dokan_Tracker();
+        $this->container['seller_wizard']     = new Dokan_Seller_Setup_Wizard();
+        $this->container['core']              = new Dokan_Core();
+        $this->container['scripts']           = new Dokan_Assets();
+        $this->container['email']             = Dokan_Email::init();
+        $this->container['vendor']            = new Dokan_Vendor_Manager();
+        $this->container['product']           = new Dokan_Product_Manager();
+        $this->container['shortcode']         = new Dokan_Shortcodes();
+        $this->container['registration']      = new Dokan_Registration();
+        $this->container['orders']            = new Dokan_Order_Manager();
+        $this->container['shipping_tracking'] = Dokan_Shipping_Tracking::init();
+        $this->container['api']               = new Dokan_API_Manager();
 
         if ( is_user_logged_in() ) {
             Dokan_Template_Main::init();
