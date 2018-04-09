@@ -11,8 +11,10 @@ if ( !dokan_is_seller_has_order( dokan_get_current_user_id(), $order_id ) ) {
 $statuses = wc_get_order_statuses();
 $order    = new WC_Order( $order_id );
 $hide_customer_info = dokan_get_option( 'hide_customer_info', 'dokan_selling', 'off' );
+
 $dst = new Dokan_Shipping_Tracking;
 $shipping_carriers = $dst->get_shipping_carriers();
+$shipping_statuses = $dst->get_shipping_statuses();
 ?>
 <div class="dokan-clearfix">
     <div class="dokan-w8 dokan-order-left-content">
@@ -161,7 +163,7 @@ $shipping_carriers = $dst->get_shipping_carriers();
                         <form id="add-shipping-tracking-form" method="post" class="" style="margin-top: 10px;">
                             <div class="dokan-form-group">
                                 <label class="dokan-control-label"><?php _e( 'Carrier', 'dokan-lite' ); ?></label>
-                                <select class="form-control" name="shipping_carriers">
+                                <select class="form-control" name="shipping_carriers" id="shipping-carrier">
                                     <?php foreach ( $shipping_carriers as $key  => $value ) : ?>
                                         <option value="<?php echo $key ?>"> <?php echo $value ?> </option>
                                     <?php endforeach; ?>
@@ -170,7 +172,7 @@ $shipping_carriers = $dst->get_shipping_carriers();
 
                             <div class="dokan-form-group">
                                 <label class="dokan-control-label"><?php _e( 'Tracking No', 'dokan-lite' ); ?></label>
-                                <input type="text" name="tracking_number" id="tracking_no" class="dokan-form-control" value="">
+                                <input type="text" name="tracking_number" id="tracking-no" class="dokan-form-control" value="">
                             </div>
 
                             <div class="dokan-form-group">
@@ -180,13 +182,15 @@ $shipping_carriers = $dst->get_shipping_carriers();
 
                             <div class="dokan-form-group">
                                 <label class="dokan-control-label"><?php _e( 'Status', 'dokan-lite' ); ?></label>
-
+                                <select id="shipping-status" class="form-control" name="shipping_status">
+                                    <?php foreach( $shipping_statuses as $key => $value ) : ?>
+                                        <option value="<?php echo $key ?>"> <?php echo $value ?> </option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
 
                             <input type="hidden" name="security" id="security" value="<?php echo wp_create_nonce('add-shipping-tracking-info'); ?>">
-                            <?php wp_nonce_field( 'dokan_security_action', 'dokan_security_nonce' ); ?>
                             <input type="hidden" name="post_id" id="post-id" value="<?php echo dokan_get_prop( $order, 'id' ); ?>">
-                            <input type="hidden" name="action" id="action" value="dokan_add_shipping_tracking_info">
 
                             <div class="dokan-form-group">
                                 <button type="submit" id="add-shipping-tracking" class="btn btn-primary" name=""> <?php _e( 'Add Tracking Details', 'dokan-lite' ); ?> </button>

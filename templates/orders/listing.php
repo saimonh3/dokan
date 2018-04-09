@@ -47,7 +47,12 @@ if ( $user_orders ) {
                         <?php echo '<span class="dokan-label dokan-label-' . dokan_get_order_status_class( dokan_get_prop( $the_order, 'status' ) ) . '">' . dokan_get_order_status_translated( dokan_get_prop( $the_order, 'status' ) ) . '</span>'; ?>
                     </td>
                     <td class="dokan-order-shipping-status data-title="<?php _e( 'Shipping', 'dokan-lite' ); ?> >
-                    
+                        <?php if( ! empty( get_post_meta( $order->order_id, 'shipping_status', true ) ) ) {
+                            $status = get_post_meta( $order->order_id, 'shipping_status', true );
+                            echo '<span class="dokan-label dokan-label-'. $dst->get_shipping_status_class( $status ) .'">' . $dst->get_shipping_statuses()[$status];
+                        } else {
+                            echo '<span class="dokan-label dokan-label-warning">' . __( 'Processing', 'dokan-lite' );
+                        } ?>
                     </td>
                     <td class="dokan-order-customer" data-title="<?php _e( 'Customer', 'dokan-lite' ); ?>" >
                         <?php

@@ -2006,5 +2006,29 @@ jQuery(function($) {
 })(jQuery);
 
 ;(function($e) {
-    
+    $('#add-shipping-tracking').on('click', function(e) {
+        e.preventDefault();
+        var shipping_info = {
+            shipping_carrier: $('#shipping-carrier').val(),
+            tracking_no: $('#tracking-no').val(),
+            shipping_date: $('#shipped-date').val(),
+            shipping_status: $('#shipping-status').val(),
+            post_id: $('#post-id').val(),
+            security: $('#security').val(),
+
+        }
+
+        $.ajax({
+            url: dokan.ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'handle_shipping_tracking',
+                shipping_info,
+            },
+            success: function( e ) {
+                console.log( e );
+            }
+
+        });
+    });
 })(jQuery);
