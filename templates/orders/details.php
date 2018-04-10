@@ -165,7 +165,7 @@ $shipping_statuses = $dst->get_shipping_statuses();
                                 <label class="dokan-control-label"><?php _e( 'Carrier', 'dokan-lite' ); ?></label>
                                 <select class="form-control" name="shipping_carriers" id="shipping-carrier">
                                     <?php foreach ( $shipping_carriers as $key  => $value ) : ?>
-                                        <option value="<?php echo $key ?>"> <?php echo $value ?> </option>
+                                        <option value="<?php echo $value ?>"> <?php echo $value ?> </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
