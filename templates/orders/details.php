@@ -156,7 +156,7 @@ $shipping_statuses = $dst->get_shipping_statuses();
             </div>
 
 
-            <div class="" style="width: 100%">
+            <div class="dokan-shpping-tracking" style="width: 100%">
                 <div class="dokan-panel dokan-panel-default">
                     <div class="dokan-panel-heading"><strong><?php _e( 'Shipping Tracking', 'dokan-lite' ); ?></strong></div>
                     <div class="dokan-panel-body">

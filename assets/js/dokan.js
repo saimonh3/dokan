@@ -2018,6 +2018,8 @@ jQuery(function($) {
 
         }
 
+        $('.dokan-shpping-tracking').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
         $.ajax({
             url: dokan.ajaxurl,
             type: 'POST',
@@ -2025,8 +2027,12 @@ jQuery(function($) {
                 action: 'handle_shipping_tracking',
                 shipping_info,
             },
-            success: function( e ) {
-                console.log( e );
+            success: function() {
+                $('.dokan-shpping-tracking').unblock();
+            },
+            error: function( xhr, message ) {
+                $('.dokan-shpping-tracking').unblock();
+                console.log( 'something went wrong ' + message );
             }
 
         });
