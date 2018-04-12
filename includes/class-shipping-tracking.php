@@ -17,6 +17,13 @@ class Dokan_Shipping_Tracking {
     public function init_hooks() {
         add_action( 'wp_ajax_handle_shipping_tracking', array( $this, 'handle_shipping_tracking' ) );
         add_action( 'woocommerce_order_details_after_order_table', array( $this, 'load_customer_shipping_tracking' ) );
+
+        add_filter( 'manage_edit-shop_order_columns', array( $this, 'add_shipping_tracking_column' ), 12 );
+        add_action( 'manage_shop_order_posts_custom_column', array( $this, 'render_shipping_tracking_column_data' ), 12, 2 );
+
+        // add metabox to admin order details page
+        add_action( 'add_meta_boxes', array( $this, 'render_shipping_tracking_matabox' ), 31 );
+        add_action( 'woocommerce_process_shop_order_meta', array( $this, 'save_shipping_tracking_metabox' ), 10, 2 );
     }
 
     public function handle_shipping_tracking () {
@@ -45,6 +52,132 @@ class Dokan_Shipping_Tracking {
     }
 
     /**
+     * Add shipping status column
+     *
+     * @param array columns;
+     *
+     *@since 2.8.0
+     *
+     * @return array column;
+     */
+    function add_shipping_tracking_column( $columns ) {
+        $column = array();
+
+        foreach( $columns as $key => $val ) {
+            if ( 'order_status' == $key ) {
+                $column[$key] = $val;
+                $column['shipping_status'] = __( 'Shipping', 'dokan-lite' );
+            } else {
+                $column[$key] = $val;
+            }
+        }
+
+        return $column;
+    }
+
+    function render_shipping_tracking_column_data( $column, $order_id ) {
+        if ( $column !== 'shipping_status' ) {
+            return $column;
+        }
+
+        if ( ! empty( get_post_meta( $order_id, 'shipping_status', true ) ) ) {
+            $status = get_post_meta( $order_id, 'shipping_status', true );
+            printf( '<mark class="order-status status-%s"> <span> %s </span> </mark>', $this->get_admin_shipping_status_class( $status ), $this->get_shipping_statuses()[$status] );
+        } else {
+            printf( '<mark class="order-status status-processing"> <span> Default Status </span> </mark>' );
+        }
+    }
+
+    public function render_shipping_tracking_matabox() {
+        add_meta_box(
+            'woocommerce-order-shipping-tracking',
+            __( 'Shipping Tracking', 'dokan-lite' ),
+            array( $this, 'shipping_tracking_metabox' ),
+            'shop_order',
+            'side',
+            'high'
+        );
+    }
+
+    public function shipping_tracking_metabox() {
+        $shipping_carriers = $this->get_shipping_carriers();
+        $shipping_statuses = $this->get_shipping_statuses();
+
+        global $post;
+        $order_id = $post->ID;
+
+        $tracking_no        = ! empty( get_post_meta( $order_id, 'tracking_no', true ) ) ? get_post_meta( $order_id, 'tracking_no', true ) : '';
+        $shipping_date      = ! empty( get_post_meta( $order_id, 'shipping_date', true ) ) ? get_post_meta( $order_id, 'shipping_date', true ) : '';
+        $shipping_status    = ! empty( get_post_meta( $order_id, 'shipping_status', true ) ) ? get_post_meta( $order_id, 'shipping_status', true ) : '';
+        $shipping_carrier   = ! empty( get_post_meta( $order_id, 'shipping_carrier', true ) ) ? get_post_meta( $order_id, 'shipping_carrier', true ) : '';
+        // var_dump( $tracking_no, $shipping_date, $shipping_status, $shipping_carrier );
+
+        ?>
+            <div class="" id="actions">
+                <p class="post-attributes-label-wrapper">
+                    <label class="post-attributes-label"><?php _e( 'Carrier', 'dokan-lite' ); ?></label>
+                </p>
+                <select class="regular-text" name="shipping_carriers" id="shipping-carrier">
+                    <?php foreach ( $shipping_carriers as $key  => $value ) : ?>
+                        <option value="<?php echo $value ?>"> <?php echo $value ?> </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <p class="post-attributes-label-wrapper">
+                <label class="post-attributes-label"><?php _e( 'Tracking No', 'dokan-lite' ); ?></label>
+            </p>
+            <input type="text" name="tracking_number" id="tracking-no" class="text" value="<?php echo esc_attr( $tracking_no ); ?>">
+
+            <p class="post-attributes-label-wrapper">
+                <label class="post-attributes-label"><?php _e( 'Date', 'dokan-lite' ); ?></label>
+            </p>
+            <input type="text" name="shipped_date" id="shipped-date" class="text" value="<?php echo esc_attr( $shipping_date ); ?>" placeholder="<?php _e( 'YYYY-MM-DD', 'dokan-lite' ); ?>">
+
+            <div class="" id="actions">
+                <p class="post-attributes-label-wrapper">
+                    <label class="post-attributes-label"><?php _e( 'Status', 'dokan-lite' ); ?></label>
+                </p>
+                <select id="shipping-status" class="regular-text" name="shipping_status">
+                    <?php foreach( $shipping_statuses as $key => $value ) : ?>
+                        <option value="<?php echo $key ?>" <?php selected( $key, $shipping_status ) ?> "> <?php echo $value ?> </option>
+                    <?php endforeach; ?>
+                </select>
+                <input type="hidden" name="security" id="security" value="<?php echo wp_create_nonce('add-shipping-tracking-info'); ?>">
+            </div>
+            <?php submit_button( 'Update' ) ?>
+
+        <script type="text/javascript">
+            $(function() {
+                $('#shipped-date').datepicker({
+                    dateFormat : 'yy-mm-dd'
+                });
+            });
+        </script>
+
+        <?php
+    }
+
+    public function save_shipping_tracking_metabox() {
+        if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( $_POST['security'], 'add-shipping-tracking-info' ) ) {
+            return;
+        }
+
+        $order_id           = wc_clean( $_POST['post_ID'] );
+        $tracking_no        = wc_clean( $_POST['tracking_number'] );
+        $shipping_date      = wc_clean( $_POST['shipped_date'] );
+        $shipping_carrier   = wc_clean( $_POST['shipping_carriers'] );
+        $shipping_status    = wc_clean( $_POST['shipping_status'] );
+
+        update_post_meta( $order_id, 'tracking_no', $tracking_no );
+        update_post_meta( $order_id, 'shipping_date', $shipping_date );
+        update_post_meta( $order_id, 'shipping_carrier', $shipping_carrier );
+        update_post_meta( $order_id, 'shipping_status', $shipping_status );
+
+        do_action( 'dokan_handle_shipping_tracking', $order_id );
+    }
+
+    /**
      * Load customer shipping tracking
      * @param  object order;
      *
@@ -53,7 +186,6 @@ class Dokan_Shipping_Tracking {
      * @return [type]        [description]
      */
     public function load_customer_shipping_tracking( $order ) {
-
         if ( is_admin() ) {
             return;
         }
@@ -66,10 +198,8 @@ class Dokan_Shipping_Tracking {
 
         // return early if no shipping tracking info is available
         if ( empty( $tracking_no ) || empty( $shipping_carrier ) || empty( $shipping_time ) ) {
-            // return;
+            return;
         }
-
-        // var_dump( $tracking_no, $shipping_carrier, $shipping_date );
 
         ?>
         <div class="customer-shipping-tracking">
@@ -94,7 +224,7 @@ class Dokan_Shipping_Tracking {
 
     public static function init() {
         if ( is_null( self::$instance ) ) {
-            self::$instance = new Self;
+            self::$instance = new Dokan_Shipping_Tracking();
         }
 
         return self::$instance;
@@ -115,10 +245,17 @@ class Dokan_Shipping_Tracking {
             case 'processing':
                 return 'wanring';
         }
-        // $statuses = $this->get_shipping_statuses();
-        //
-        // return applay_filters( 'get_shipping_status_class', $statuses );
+    }
 
+    public function get_admin_shipping_status_class( $status ) {
+        switch ( $status ) {
+            case 'delivered':
+                return 'completed';
+            case 'on-hold':
+                return 'on-hold';
+            case 'processing':
+                return 'processing';
+        }
     }
 
     function get_shipping_statuses() {
