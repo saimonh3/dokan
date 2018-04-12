@@ -110,42 +110,41 @@ class Dokan_Shipping_Tracking {
         $shipping_date      = ! empty( get_post_meta( $order_id, 'shipping_date', true ) ) ? get_post_meta( $order_id, 'shipping_date', true ) : '';
         $shipping_status    = ! empty( get_post_meta( $order_id, 'shipping_status', true ) ) ? get_post_meta( $order_id, 'shipping_status', true ) : '';
         $shipping_carrier   = ! empty( get_post_meta( $order_id, 'shipping_carrier', true ) ) ? get_post_meta( $order_id, 'shipping_carrier', true ) : '';
-        // var_dump( $tracking_no, $shipping_date, $shipping_status, $shipping_carrier );
 
         ?>
-            <div class="" id="actions">
-                <p class="post-attributes-label-wrapper">
-                    <label class="post-attributes-label"><?php _e( 'Carrier', 'dokan-lite' ); ?></label>
-                </p>
-                <select class="regular-text" name="shipping_carriers" id="shipping-carrier">
-                    <?php foreach ( $shipping_carriers as $key  => $value ) : ?>
-                        <option value="<?php echo $value ?>"> <?php echo $value ?> </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
+        <div class="" id="actions">
             <p class="post-attributes-label-wrapper">
-                <label class="post-attributes-label"><?php _e( 'Tracking No', 'dokan-lite' ); ?></label>
+                <label class="post-attributes-label"><?php _e( 'Carrier', 'dokan-lite' ); ?></label>
             </p>
-            <input type="text" name="tracking_number" id="tracking-no" class="text" value="<?php echo esc_attr( $tracking_no ); ?>">
+            <select class="regular-text" name="shipping_carriers" id="shipping-carrier">
+                <?php foreach ( $shipping_carriers as $key  => $value ) : ?>
+                    <option value="<?php echo $value ?>" <?php selected( $value, $shipping_carrier ); ?> > <?php echo $value ?> </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
 
+        <p class="post-attributes-label-wrapper">
+            <label class="post-attributes-label"><?php _e( 'Tracking No', 'dokan-lite' ); ?></label>
+        </p>
+        <input type="text" name="tracking_number" id="tracking-no" class="text" value="<?php echo esc_attr( $tracking_no ); ?>">
+
+        <p class="post-attributes-label-wrapper">
+            <label class="post-attributes-label"><?php _e( 'Date', 'dokan-lite' ); ?></label>
+        </p>
+        <input type="text" name="shipped_date" id="shipped-date" class="text" value="<?php echo esc_attr( $shipping_date ); ?>" placeholder="<?php _e( 'YYYY-MM-DD', 'dokan-lite' ); ?>">
+
+        <div class="" id="actions">
             <p class="post-attributes-label-wrapper">
-                <label class="post-attributes-label"><?php _e( 'Date', 'dokan-lite' ); ?></label>
+                <label class="post-attributes-label"><?php _e( 'Status', 'dokan-lite' ); ?></label>
             </p>
-            <input type="text" name="shipped_date" id="shipped-date" class="text" value="<?php echo esc_attr( $shipping_date ); ?>" placeholder="<?php _e( 'YYYY-MM-DD', 'dokan-lite' ); ?>">
-
-            <div class="" id="actions">
-                <p class="post-attributes-label-wrapper">
-                    <label class="post-attributes-label"><?php _e( 'Status', 'dokan-lite' ); ?></label>
-                </p>
-                <select id="shipping-status" class="regular-text" name="shipping_status">
-                    <?php foreach( $shipping_statuses as $key => $value ) : ?>
-                        <option value="<?php echo $key ?>" <?php selected( $key, $shipping_status ) ?> "> <?php echo $value ?> </option>
-                    <?php endforeach; ?>
-                </select>
-                <input type="hidden" name="security" id="security" value="<?php echo wp_create_nonce('add-shipping-tracking-info'); ?>">
-            </div>
-            <?php submit_button( 'Update' ) ?>
+            <select id="shipping-status" class="regular-text" name="shipping_status">
+                <?php foreach( $shipping_statuses as $key => $value ) : ?>
+                    <option value="<?php echo $key ?>" <?php selected( $key, $shipping_status ) ?> "> <?php echo $value ?> </option>
+                <?php endforeach; ?>
+            </select>
+            <input type="hidden" name="security" id="security" value="<?php echo wp_create_nonce('add-shipping-tracking-info'); ?>">
+        </div>
+        <?php submit_button( 'Update' ); ?>
 
         <script type="text/javascript">
             $(function() {
