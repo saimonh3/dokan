@@ -2071,7 +2071,7 @@ jQuery(function($) {
 
 })(jQuery);
 
-;(function($e) {
+;(function($) {
     $('#add-shipping-tracking').on('click', function(e) {
         e.preventDefault();
         var shipping_info = {

@@ -10,7 +10,7 @@ $order_date   = isset( $_GET['order_date'] ) ? sanitize_key( $_GET['order_date']
 $user_orders  = dokan_get_seller_orders( $seller_id, $order_status, $order_date, $limit, $offset );
 
 $dst = new Dokan_Shipping_Tracking;
-// var_dump( $dst->get_shipping_statuses()['delivered'] );
+
 if ( $user_orders ) {
     ?>
     <table class="dokan-table dokan-table-striped">

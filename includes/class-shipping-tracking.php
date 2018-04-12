@@ -23,7 +23,7 @@ class Dokan_Shipping_Tracking {
 
         // add metabox to admin order details page
         add_action( 'add_meta_boxes', array( $this, 'render_shipping_tracking_matabox' ), 31 );
-        add_action( 'woocommerce_process_shop_order_meta', array( $this, 'save_shipping_tracking_metabox' ), 10, 2 );
+        add_action( 'woocommerce_process_shop_order_meta', array( $this, 'save_shipping_tracking_metabox' ) );
     }
 
     public function handle_shipping_tracking () {
@@ -48,7 +48,6 @@ class Dokan_Shipping_Tracking {
         update_post_meta( $order_id, 'shipping_status', $shipping_status );
 
         do_action( 'dokan_handle_shipping_tracking', $order_id );
-        // error_log( print_r( $_POST['action'], true ) );
     }
 
     /**
@@ -189,7 +188,6 @@ class Dokan_Shipping_Tracking {
             return;
         }
 
-        // var_dump( $order->get_id() );
         $order_id           = $order->get_id();
         $tracking_no        = get_post_meta( $order_id, 'tracking_no', true );
         $shipping_carrier   = get_post_meta( $order_id, 'shipping_carrier', true );
@@ -202,7 +200,7 @@ class Dokan_Shipping_Tracking {
 
         ?>
         <div class="customer-shipping-tracking">
-            <h3> <?php _e( 'Shipping Tracking', 'dokan-lite' ) ?> </h3>
+            <h2> <?php _e( 'Shipping Tracking', 'dokan-lite' ) ?> </h2>
             <table>
                 <tbody>
                     <tr>
@@ -217,8 +215,14 @@ class Dokan_Shipping_Tracking {
                 </tbody>
             </table>
         </div>
-        <?php
 
+        <style type="text/css">
+            .customer-shipping-tracking table th {
+                padding: 8px;
+                border: 2px dashed #80808085;
+            }
+        </style>
+        <?php
     }
 
     public static function init() {
