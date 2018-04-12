@@ -24,6 +24,9 @@ class Dokan_Shipping_Tracking {
         // add metabox to admin order details page
         add_action( 'add_meta_boxes', array( $this, 'render_shipping_tracking_matabox' ), 31 );
         add_action( 'woocommerce_process_shop_order_meta', array( $this, 'save_shipping_tracking_metabox' ) );
+
+        // add shipping tracking box in the seller dashboard
+        add_action( 'dokan_order_detail_after_order_items', array( $this, 'render_shipping_tracking_form' ) );
     }
 
     public function handle_shipping_tracking () {
@@ -173,6 +176,63 @@ class Dokan_Shipping_Tracking {
         update_post_meta( $order_id, 'shipping_status', $shipping_status );
 
         do_action( 'dokan_handle_shipping_tracking', $order_id );
+    }
+
+    public function render_shipping_tracking_form( $order ) {
+        $dst = new Dokan_Shipping_Tracking;
+        $shipping_carriers = $dst->get_shipping_carriers();
+        $shipping_statuses = $dst->get_shipping_statuses();
+
+        $order_id           = $order->get_id();
+        $tracking_no        = ! empty( get_post_meta( $order_id, 'tracking_no', true ) ) ? get_post_meta( $order_id, 'tracking_no', true ) : '';
+        $shipping_date      = ! empty( get_post_meta( $order_id, 'shipping_date', true ) ) ? get_post_meta( $order_id, 'shipping_date', true ) : '';
+        $shipping_status    = ! empty( get_post_meta( $order_id, 'shipping_status', true ) ) ? get_post_meta( $order_id, 'shipping_status', true ) : '';
+        $shipping_carrier   = ! empty( get_post_meta( $order_id, 'shipping_carrier', true ) ) ? get_post_meta( $order_id, 'shipping_carrier', true ) : '';
+        ?>
+        <div class="dokan-shpping-tracking" style="width: 100%">
+            <div class="dokan-panel dokan-panel-default">
+                <div class="dokan-panel-heading"><strong><?php _e( 'Shipping Tracking', 'dokan-lite' ); ?></strong></div>
+                <div class="dokan-panel-body">
+                    <form id="add-shipping-tracking-form" method="post" class="" style="margin-top: 10px;">
+                        <div class="dokan-form-group">
+                            <label class="dokan-control-label"><?php _e( 'Carrier', 'dokan-lite' ); ?></label>
+                            <select class="form-control" name="shipping_carriers" id="shipping-carrier">
+                                <?php foreach ( $shipping_carriers as $key  => $value ) : ?>
+                                    <option value="<?php echo $value ?>" <?php selected( $value, $shipping_carrier ); ?> > <?php echo $value ?> </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="dokan-form-group">
+                            <label class="dokan-control-label"><?php _e( 'Tracking No', 'dokan-lite' ); ?></label>
+                            <input type="text" name="tracking_number" id="tracking-no" class="dokan-form-control" value="<?php echo esc_attr( $tracking_no ); ?>">
+                        </div>
+
+                        <div class="dokan-form-group">
+                            <label class="dokan-control-label"><?php _e( 'Date', 'dokan-lite' ); ?></label>
+                            <input type="text" name="shipped_date" id="shipped-date" class="dokan-form-control" value="<?php echo esc_attr( $shipping_date ); ?>" placeholder="<?php _e( 'YYYY-MM-DD', 'dokan-lite' ); ?>">
+                        </div>
+
+                        <div class="dokan-form-group">
+                            <label class="dokan-control-label"><?php _e( 'Status', 'dokan-lite' ); ?></label>
+                            <select id="shipping-status" class="form-control" name="shipping_status">
+                                <?php foreach( $shipping_statuses as $key => $value ) : ?>
+                                    <option value="<?php echo $key ?>" <?php selected( $key, $shipping_status ) ?> "> <?php echo $value ?> </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <input type="hidden" name="security" id="security" value="<?php echo wp_create_nonce('add-shipping-tracking-info'); ?>">
+                        <input type="hidden" name="post_id" id="post-id" value="<?php echo dokan_get_prop( $order, 'id' ); ?>">
+
+                        <div class="dokan-form-group">
+                            <button type="submit" id="add-shipping-tracking" class="btn btn-primary" name=""> <?php _e( 'Add Tracking Details', 'dokan-lite' ); ?> </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <?php
     }
 
     /**
