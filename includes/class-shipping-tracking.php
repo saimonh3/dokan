@@ -141,12 +141,13 @@ class Dokan_Shipping_Tracking {
             </p>
             <select id="shipping-status" class="regular-text" name="shipping_status">
                 <?php foreach( $shipping_statuses as $key => $value ) : ?>
-                    <option value="<?php echo $key ?>" <?php selected( $key, $shipping_status ) ?> "> <?php echo $value ?> </option>
+                    <option value="<?php echo $key ?>" <?php selected( $key, $shipping_status ) ?> "> <?php echo $value; ?> </option>
                 <?php endforeach; ?>
             </select>
-            <input type="hidden" name="security" id="security" value="<?php echo wp_create_nonce('add-shipping-tracking-info'); ?>">
+            <input type="hidden" name="security" id="security" value="<?php echo wp_create_nonce( 'add-shipping-tracking-info' ); ?>">
         </div>
-        <?php submit_button( 'Update' ); ?>
+
+        <p><input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Update', 'dokan-lite' ) ?>"></p>
 
         <script type="text/javascript">
             $(function() {
