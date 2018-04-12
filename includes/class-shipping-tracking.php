@@ -242,7 +242,7 @@ class Dokan_Shipping_Tracking {
             case 'on-hold':
                 return 'warning';
             case 'processing':
-                return 'wanring';
+                return 'warning';
         }
     }
 

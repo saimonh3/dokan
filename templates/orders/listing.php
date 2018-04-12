@@ -51,7 +51,7 @@ if ( $user_orders ) {
                             $status = get_post_meta( $order->order_id, 'shipping_status', true );
                             echo '<span class="dokan-label dokan-label-'. $dst->get_shipping_status_class( $status ) .'">' . $dst->get_shipping_statuses()[$status];
                         } else {
-                            echo '<span class="dokan-label dokan-label-warning">' . __( 'Processing', 'dokan-lite' );
+                            echo '<span class="dokan-label dokan-label-warning">' . __( 'Default Status', 'dokan-lite' );
                         } ?>
                     </td>
                     <td class="dokan-order-customer" data-title="<?php _e( 'Customer', 'dokan-lite' ); ?>" >
