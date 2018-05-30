@@ -33,7 +33,6 @@ class Dokan_Installer {
         if ( ! $was_installed_before ) {
             set_transient( '_dokan_setup_page_redirect', true, 30 );
         }
-
     }
 
     /**
@@ -77,25 +76,6 @@ class Dokan_Installer {
      */
     function woocommerce_settings() {
         update_option( 'woocommerce_enable_myaccount_registration', 'yes' );
-    }
-
-    /**
-     * Redirect to Setup page if transient is valid
-     *
-     * @since 2.5
-     *
-     * @return void
-     */
-    public static function setup_page_redirect( $plugin ) {
-
-        if ( !get_transient( '_dokan_setup_page_redirect' ) ) {
-            return;
-        }
-        // Delete the redirect transient
-        delete_transient( '_dokan_setup_page_redirect' );
-
-        wp_safe_redirect( add_query_arg( array( 'page' => 'dokan-setup' ), admin_url( 'index.php' ) ) );
-        exit;
     }
 
     /**
@@ -166,7 +146,7 @@ class Dokan_Installer {
         $all_cap      = dokan_get_all_caps();
 
         foreach( $all_cap as $key=>$cap ) {
-            $capabilities = array_merge( $capabilities, $cap );
+            $capabilities = array_merge( $capabilities, array_keys( $cap ) );
         }
 
         $wp_roles->add_cap( 'shop_manager', 'dokandar' );

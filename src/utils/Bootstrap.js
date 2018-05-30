@@ -6,6 +6,11 @@ import ListTable from 'vue-wp-list-table';
 import Multiselect from 'vue-multiselect'
 import API_Helper from '@/utils/Api'
 import ChartJS from 'vue-chartjs'
+import Mixin from './Mixin'
+
+window.__ = function( text, domain ) {
+  return __( text, domain );
+}
 
 import {
   VclCode,
@@ -28,6 +33,8 @@ import "vue-multiselect/dist/vue-multiselect.min.css"
 
 Vue.use(Notifications)
 Vue.component('multiselect', Multiselect)
+
+Vue.mixin( Mixin );
 
 Vue.filter('currency', function (value) {
     return accounting.formatMoney(value, dokan.currency);

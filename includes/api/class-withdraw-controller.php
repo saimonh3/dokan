@@ -127,7 +127,6 @@ class Dokan_REST_Withdraw_Controller extends WP_REST_Controller {
                 'permission_callback' => array( $this, 'batch_items_permissions_check' ),
                 'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
             ),
-            'schema' => array( $this, 'get_public_batch_schema' ),
         ) );
     }
 
@@ -165,7 +164,7 @@ class Dokan_REST_Withdraw_Controller extends WP_REST_Controller {
         $store_id = dokan_get_current_user_id();
 
         if ( empty( $store_id ) ) {
-            return new WP_Error( 'no_store_found', __( 'No vendor found' ), array( 'status' => 404 ) );
+            return new WP_Error( 'no_store_found', __( 'No vendor found', 'dokan-lite' ), array( 'status' => 404 ) );
         }
 
         $status = ! empty( $request['status'] ) ? $request['status'] : '';
@@ -229,7 +228,7 @@ class Dokan_REST_Withdraw_Controller extends WP_REST_Controller {
         }
 
         if ( empty( $store_id ) ) {
-            return new WP_Error( 'no_store_found', __( 'No vendor found' ), array( 'status' => 404 ) );
+            return new WP_Error( 'no_store_found', __( 'No vendor found', 'dokan-lite' ), array( 'status' => 404 ) );
         }
 
         $status = ! empty( $request['status'] ) ? $request['status'] : 'cancelled';
@@ -257,6 +256,13 @@ class Dokan_REST_Withdraw_Controller extends WP_REST_Controller {
         } else {
             $user_id = $store_id;
             $status_code = 2;
+        }
+
+        // if its an approve request and don't have enough balance then return early
+        if ( $status_code === 1 ) {
+            if ( dokan_get_seller_balance( $result->user_id, false ) < $result->amount ) {
+                return;
+            }
         }
 
         $withdraw->update_status( $request['id'], $user_id, $status_code );
@@ -304,7 +310,7 @@ class Dokan_REST_Withdraw_Controller extends WP_REST_Controller {
         $store_id = dokan_get_current_user_id();
 
         if ( empty( $store_id ) ) {
-            return new WP_Error( 'no_store_found', __( 'No vendor found' ), array( 'status' => 404 ) );
+            return new WP_Error( 'no_store_found', __( 'No vendor found', 'dokan-lite' ), array( 'status' => 404 ) );
         }
 
         $formatted = false;
@@ -472,6 +478,13 @@ class Dokan_REST_Withdraw_Controller extends WP_REST_Controller {
                 } else {
                     foreach ( $value as $withdraw_id ) {
                         $status_code = $this->get_status( $status );
+                        $user = $wpdb->get_row( "SELECT user_id, amount FROM {$wpdb->prefix}dokan_withdraw WHERE id = {$withdraw_id}" );
+
+
+                        if ( $status_code === 1 && dokan_get_seller_balance( $user->user_id, false ) < $user->amount ) {
+                            continue;
+                        }
+
                         $wpdb->query( $wpdb->prepare(
                             "UPDATE {$wpdb->prefix}dokan_withdraw
                             SET status = %d WHERE id = %d",
