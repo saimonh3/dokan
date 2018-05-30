@@ -14,8 +14,17 @@ class Dokan_Shipping_Tracking {
         $this->init_hooks();
     }
 
+    /**
+     * Init all the hooks
+     *
+     * @since 2.8.2
+     *
+     * @return void
+     */
     public function init_hooks() {
         add_action( 'wp_ajax_handle_shipping_tracking', array( $this, 'handle_shipping_tracking' ) );
+
+        // show shipping tracking data into customer order page
         add_action( 'woocommerce_order_details_after_order_table', array( $this, 'load_customer_shipping_tracking' ) );
 
         add_filter( 'manage_edit-shop_order_columns', array( $this, 'add_shipping_tracking_column' ), 12 );
@@ -29,6 +38,13 @@ class Dokan_Shipping_Tracking {
         add_action( 'dokan_order_detail_after_order_items', array( $this, 'render_shipping_tracking_form' ) );
     }
 
+    /**
+     * Save shipping tracking data
+     *
+     * @since 2.8.2
+     *
+     * @return void
+     */
     public function handle_shipping_tracking () {
         if ( ! isset( $_POST['action'] ) || $_POST['action'] !== 'handle_shipping_tracking' ) {
             return;
@@ -58,7 +74,7 @@ class Dokan_Shipping_Tracking {
      *
      * @param array columns;
      *
-     *@since 2.8.0
+     * @since 2.8.2
      *
      * @return array column;
      */
@@ -77,6 +93,17 @@ class Dokan_Shipping_Tracking {
         return $column;
     }
 
+    /**
+     * Render shipping tracking column
+     *
+     * @param $column
+     *
+     * @param $order_id
+     *
+     * @since 2.8.2
+     *
+     * @return mixed
+     */
     function render_shipping_tracking_column_data( $column, $order_id ) {
         if ( $column !== 'shipping_status' ) {
             return $column;
@@ -90,6 +117,13 @@ class Dokan_Shipping_Tracking {
         }
     }
 
+    /**
+     * Render shipping tracking metabox
+     *
+     * @since 2.8.2
+     *
+     * @return string
+     */
     public function render_shipping_tracking_matabox() {
         add_meta_box(
             'woocommerce-order-shipping-tracking',
@@ -101,6 +135,13 @@ class Dokan_Shipping_Tracking {
         );
     }
 
+    /**
+     * Shipping Tracking Metabox
+     *
+     * @since 2.8.2
+     *
+     * @return string
+     */
     public function shipping_tracking_metabox() {
         $shipping_carriers = $this->get_shipping_carriers();
         $shipping_statuses = $this->get_shipping_statuses();
@@ -160,6 +201,13 @@ class Dokan_Shipping_Tracking {
         <?php
     }
 
+    /**
+     * Save shipping tracking metabox
+     *
+     * @since 2.8.2
+     *
+     * @return void
+     */
     public function save_shipping_tracking_metabox() {
         if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( $_POST['security'], 'add-shipping-tracking-info' ) ) {
             return;
@@ -179,6 +227,15 @@ class Dokan_Shipping_Tracking {
         do_action( 'dokan_handle_shipping_tracking', $order_id );
     }
 
+    /**
+     * Render shipping tracking form
+     *
+     * @param $order
+     *
+     * @since 2.8.2
+     *
+     * @return string
+     */
     public function render_shipping_tracking_form( $order ) {
         $dst = new Dokan_Shipping_Tracking;
         $shipping_carriers = $dst->get_shipping_carriers();
@@ -238,11 +295,12 @@ class Dokan_Shipping_Tracking {
 
     /**
      * Load customer shipping tracking
+     *
      * @param  object order;
      *
-     * @since 2.8.0
+     * @since 2.8.2
      *
-     * @return [type]        [description]
+     * @return string
      */
     public function load_customer_shipping_tracking( $order ) {
         if ( is_admin() ) {
@@ -253,6 +311,7 @@ class Dokan_Shipping_Tracking {
         $tracking_no        = get_post_meta( $order_id, 'tracking_no', true );
         $shipping_carrier   = get_post_meta( $order_id, 'shipping_carrier', true );
         $shipping_time      = get_post_meta( $order_id, 'shipping_date', true );
+        $shipping_status    = get_post_meta( $order_id, 'shipping_status', true );
 
         // return early if no shipping tracking info is available
         if ( empty( $tracking_no ) || empty( $shipping_carrier ) || empty( $shipping_time ) ) {
@@ -265,13 +324,16 @@ class Dokan_Shipping_Tracking {
             <table>
                 <tbody>
                     <tr>
-                        <th><?php printf( '%s: %s', __( 'Tracking No', 'dokan-lite' ), $tracking_no ); ?></th>
+                        <th><?php printf( '%s: %s', __( 'Tracking No', 'dokan-lite' ), esc_attr( $tracking_no ) ); ?></th>
                     </tr>
                     <tr>
-                        <th><?php printf( '%s: %s', __( 'Shipping Carrier', 'dokan-lite' ), $shipping_carrier ); ?></th>
+                        <th><?php printf( '%s: %s', __( 'Shipping Carrier', 'dokan-lite' ), esc_attr( $shipping_carrier ) ); ?></th>
                     </tr>
                     <tr>
-                        <th><?php printf( '%s: %s', __( 'Shipping Time', 'dokan-lite' ), $shipping_time ); ?></th>
+                        <th><?php printf( '%s: %s', __( 'Shipping Time', 'dokan-lite' ), esc_attr( $shipping_time ) ); ?></th>
+                    </tr>
+                    <tr>
+                        <th><?php printf( '%s: %s', __( 'Shipping Status', 'dokan-lite' ), esc_attr( $this->get_shipping_statuses()[$shipping_status] ) ); ?></th>
                     </tr>
                 </tbody>
             </table>
@@ -286,6 +348,13 @@ class Dokan_Shipping_Tracking {
         <?php
     }
 
+    /**
+     * Get the class instance
+     *
+     * @since 2.8.2
+     *
+     * @return Dokan_Shipping_Tracking|null
+     */
     public static function init() {
         if ( is_null( self::$instance ) ) {
             self::$instance = new Dokan_Shipping_Tracking();
@@ -296,8 +365,11 @@ class Dokan_Shipping_Tracking {
 
     /**
     * Get bootstrap label class based on shipping status
+     *
     * @param string status
-    * @since 2.8
+     *
+    * @since 2.8.2
+     *
     * @return string
     */
     function get_shipping_status_class( $status ) {
@@ -311,6 +383,15 @@ class Dokan_Shipping_Tracking {
         }
     }
 
+    /**
+     * Get shipping status classes
+     *
+     * @param $status
+     *
+     * @since 2.8.2
+     *
+     * @return string
+     */
     public function get_admin_shipping_status_class( $status ) {
         switch ( $status ) {
             case 'delivered':
@@ -322,6 +403,13 @@ class Dokan_Shipping_Tracking {
         }
     }
 
+    /**
+     * Get shipping status
+     *
+     * @since 2.8.2
+     *
+     * @return string
+     */
     function get_shipping_statuses() {
         $statuses = array(
             'delivered'  => __( 'Delivered', 'dokan-lite' ),
@@ -332,6 +420,13 @@ class Dokan_Shipping_Tracking {
         return apply_filters( 'dokan_get_shipping_statuses', $statuses );
     }
 
+    /**
+     * Get shipping carriers
+     *
+     * @since 2.8.2
+     *
+     * @return mixed|void
+     */
     function get_shipping_carriers() {
         $carriers = array(
             'dhl'   => __( 'DHL', 'dokan-lite' ),
