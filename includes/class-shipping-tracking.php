@@ -195,8 +195,8 @@ class Dokan_Shipping_Tracking {
         <p><input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Update', 'dokan-lite' ) ?>"></p>
 
         <script type="text/javascript">
-            $(function() {
-                $('#shipped-date').datepicker({
+            jQuery(function() {
+                jQuery('#shipped-date').datepicker({
                     dateFormat : 'yy-mm-dd'
                 });
             });
