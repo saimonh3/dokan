@@ -20,6 +20,16 @@
             </td>
         </tr>
 
+        <tr :class="id" v-if="'textarea' == fieldData.type">
+            <th scope="row">
+                <label :for="sectionId + '[' + fieldData.name + ']'">{{ fieldData.label }}</label>
+            </th>
+            <td>
+                <textarea type="textarea" :rows="fieldData.rows" :cols="fieldData.cols" class="regular-text" :id="sectionId + '[' + fieldData.name + ']'" :name="sectionId + '[' + fieldData.name + ']'" v-model="fieldValue[fieldData.name]"></textarea>
+                <p class="description" v-html="fieldData.desc"></p>
+            </td>
+        </tr>
+
         <tr :class="id" v-if="'checkbox' == fieldData.type">
             <th scope="row">
                 <label :for="sectionId + '[' + fieldData.name + ']'">{{ fieldData.label }}</label>
@@ -132,7 +142,7 @@
 
         methods: {
             containCommonFields( type ) {
-                return _.contains( [ 'text', 'email', 'url', 'phone' ], type );
+                return _.contains( [ undefined, 'text', 'email', 'url', 'phone' ], type );
             }
         }
 
