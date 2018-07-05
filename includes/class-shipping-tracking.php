@@ -201,7 +201,6 @@ class Dokan_Shipping_Tracking {
                 });
             });
         </script>
-
         <?php
     }
 
@@ -344,8 +343,8 @@ class Dokan_Shipping_Tracking {
         $order_id           = $order->get_id();
         $tracking_no        = get_post_meta( $order_id, 'tracking_no', true );
         $shipping_carrier   = get_post_meta( $order_id, 'shipping_carrier', true );
-        $shipping_time      = get_post_meta( $order_id, 'shipping_date', true );
         $shipping_status    = get_post_meta( $order_id, 'shipping_status', true );
+        $shipping_time      = date_i18n( get_option( 'date_format' ), strtotime( get_post_meta( $order_id, 'shipping_date', true ) ) );
 
         // return early if no shipping tracking info is available
         if ( empty( $tracking_no ) || empty( $shipping_carrier ) || empty( $shipping_time ) ) {
@@ -354,6 +353,7 @@ class Dokan_Shipping_Tracking {
 
         ?>
         <div class="customer-shipping-tracking">
+            <?php do_action( 'dokan_customer_shipping_tracking_start' ); ?>
             <h2> <?php _e( 'Shipping Tracking', 'dokan-lite' ) ?> </h2>
             <table>
                 <tbody>
@@ -371,6 +371,7 @@ class Dokan_Shipping_Tracking {
                     </tr>
                 </tbody>
             </table>
+            <?php do_action( 'dokan_customer_shipping_tracking_end' ); ?>
         </div>
 
         <style type="text/css">
