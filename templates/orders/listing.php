@@ -9,8 +9,6 @@ $offset       = ( $paged - 1 ) * $limit;
 $order_date   = isset( $_GET['order_date'] ) ? sanitize_key( $_GET['order_date'] ) : NULL;
 $user_orders  = dokan_get_seller_orders( $seller_id, $order_status, $order_date, $limit, $offset );
 
-$dst = new Dokan_Shipping_Tracking;
-
 if ( $user_orders ) {
     ?>
     <table class="dokan-table dokan-table-striped">
@@ -19,7 +17,7 @@ if ( $user_orders ) {
                 <th><?php _e( 'Order', 'dokan-lite' ); ?></th>
                 <th><?php _e( 'Order Total', 'dokan-lite' ); ?></th>
                 <th><?php _e( 'Status', 'dokan-lite' ); ?></th>
-                <th><?php _e( 'Shipping', 'dokan-lite' ); ?></th>
+                <?php do_action( 'dokan_order_listing_column' ); ?>
                 <th><?php _e( 'Customer', 'dokan-lite' ); ?></th>
                 <th><?php _e( 'Date', 'dokan-lite' ); ?></th>
                 <?php if ( current_user_can( 'dokan_manage_order' ) ): ?>
@@ -46,14 +44,7 @@ if ( $user_orders ) {
                     <td class="dokan-order-status" data-title="<?php _e( 'Status', 'dokan-lite' ); ?>" >
                         <?php echo '<span class="dokan-label dokan-label-' . dokan_get_order_status_class( dokan_get_prop( $the_order, 'status' ) ) . '">' . dokan_get_order_status_translated( dokan_get_prop( $the_order, 'status' ) ) . '</span>'; ?>
                     </td>
-                    <td class="dokan-order-shipping-status data-title="<?php _e( 'Shipping', 'dokan-lite' ); ?> >
-                        <?php if( ! empty( get_post_meta( $order->order_id, 'shipping_status', true ) ) ) {
-                            $status = get_post_meta( $order->order_id, 'shipping_status', true );
-                            echo '<span class="dokan-label dokan-label-'. $dst->get_shipping_status_class( $status ) .'">' . $dst->get_shipping_statuses()[$status];
-                        } else {
-                            echo '<span class="dokan-label dokan-label-warning">' . __( 'Default Status', 'dokan-lite' );
-                        } ?>
-                    </td>
+                    <?php do_action( 'dokan_order_listing_start', $order ); ?>
                     <td class="dokan-order-customer" data-title="<?php _e( 'Customer', 'dokan-lite' ); ?>" >
                         <?php
 

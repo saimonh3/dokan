@@ -17,7 +17,7 @@ class Dokan_Shipping_Tracking {
     /**
      * Init all the hooks
      *
-     * @since 2.8.2
+     * @since 2.8.3
      *
      * @return void
      */
@@ -27,6 +27,7 @@ class Dokan_Shipping_Tracking {
         // show shipping tracking data into customer order page
         add_action( 'woocommerce_order_details_after_order_table', array( $this, 'load_customer_shipping_tracking' ) );
 
+        // render shipping tracking data to admin order listing page
         add_filter( 'manage_edit-shop_order_columns', array( $this, 'add_shipping_tracking_column' ), 12 );
         add_action( 'manage_shop_order_posts_custom_column', array( $this, 'render_shipping_tracking_column_data' ), 12, 2 );
 
@@ -36,12 +37,16 @@ class Dokan_Shipping_Tracking {
 
         // add shipping tracking box in the seller dashboard
         add_action( 'dokan_order_detail_after_order_items', array( $this, 'render_shipping_tracking_form' ) );
+
+        // render shipping tracking data to order listing page
+        add_action( 'dokan_order_listing_column', array( $this, 'add_vendor_shipping_tracking_column' ) );
+        add_action( 'dokan_order_listing_start', array( $this, 'render_vendor_shipping_tracking_column_data' ) );
     }
 
     /**
      * Save shipping tracking data
      *
-     * @since 2.8.2
+     * @since 2.8.3
      *
      * @return void
      */
@@ -74,7 +79,7 @@ class Dokan_Shipping_Tracking {
      *
      * @param array columns;
      *
-     * @since 2.8.2
+     * @since 2.8.3
      *
      * @return array column;
      */
@@ -100,7 +105,7 @@ class Dokan_Shipping_Tracking {
      *
      * @param $order_id
      *
-     * @since 2.8.2
+     * @since 2.8.3
      *
      * @return mixed
      */
@@ -111,16 +116,15 @@ class Dokan_Shipping_Tracking {
 
         if ( ! empty( get_post_meta( $order_id, 'shipping_status', true ) ) ) {
             $status = get_post_meta( $order_id, 'shipping_status', true );
+
             printf( '<mark class="order-status status-%s"> <span> %s </span> </mark>', $this->get_admin_shipping_status_class( $status ), $this->get_shipping_statuses()[$status] );
-        } else {
-            printf( '<mark class="order-status status-processing"> <span> Default Status </span> </mark>' );
         }
     }
 
     /**
      * Render shipping tracking metabox
      *
-     * @since 2.8.2
+     * @since 2.8.3
      *
      * @return string
      */
@@ -138,7 +142,7 @@ class Dokan_Shipping_Tracking {
     /**
      * Shipping Tracking Metabox
      *
-     * @since 2.8.2
+     * @since 2.8.3
      *
      * @return string
      */
@@ -204,7 +208,7 @@ class Dokan_Shipping_Tracking {
     /**
      * Save shipping tracking metabox
      *
-     * @since 2.8.2
+     * @since 2.8.3
      *
      * @return void
      */
@@ -232,14 +236,13 @@ class Dokan_Shipping_Tracking {
      *
      * @param $order
      *
-     * @since 2.8.2
+     * @since 2.8.3
      *
      * @return string
      */
     public function render_shipping_tracking_form( $order ) {
-        $dst = new Dokan_Shipping_Tracking;
-        $shipping_carriers = $dst->get_shipping_carriers();
-        $shipping_statuses = $dst->get_shipping_statuses();
+        $shipping_carriers = $this->get_shipping_carriers();
+        $shipping_statuses = $this->get_shipping_statuses();
 
         $order_id           = $order->get_id();
         $tracking_no        = ! empty( get_post_meta( $order_id, 'tracking_no', true ) ) ? get_post_meta( $order_id, 'tracking_no', true ) : '';
@@ -294,11 +297,42 @@ class Dokan_Shipping_Tracking {
     }
 
     /**
+     * Render shipping tracking column data in vendor order lisitng page
+     *
+     * @param  object order
+     *
+     * @since  2.8.3
+     *
+     * @return string
+     */
+    public function render_vendor_shipping_tracking_column_data( $order ) {
+        ?>
+         <td class="dokan-order-shipping-status data-title="<?php _e( 'Shipping', 'dokan-lite' ); ?> >
+            <?php if( ! empty( get_post_meta( $order->order_id, 'shipping_status', true ) ) ) {
+                $status = get_post_meta( $order->order_id, 'shipping_status', true );
+                echo '<span class="dokan-label dokan-label-'. $this->get_shipping_status_class( $status ) .'">' . $this->get_shipping_statuses()[$status];
+            } ?>
+        </td>
+        <?php
+    }
+
+    /**
+     * Add shipping tracking data column in vendor order listing page
+     *
+     * @since 2.8.3
+     *
+     * @return  string
+     */
+    public function add_vendor_shipping_tracking_column() {
+        printf( '<th>%s</th>', __( 'Shipping', 'dokan-lite' ) );
+    }
+
+    /**
      * Load customer shipping tracking
      *
      * @param  object order;
      *
-     * @since 2.8.2
+     * @since 2.8.3
      *
      * @return string
      */
@@ -351,13 +385,13 @@ class Dokan_Shipping_Tracking {
     /**
      * Get the class instance
      *
-     * @since 2.8.2
+     * @since 2.8.3
      *
      * @return Dokan_Shipping_Tracking|null
      */
     public static function init() {
         if ( is_null( self::$instance ) ) {
-            self::$instance = new Dokan_Shipping_Tracking();
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -368,7 +402,7 @@ class Dokan_Shipping_Tracking {
      *
     * @param string status
      *
-    * @since 2.8.2
+    * @since 2.8.3
      *
     * @return string
     */
@@ -388,7 +422,7 @@ class Dokan_Shipping_Tracking {
      *
      * @param $status
      *
-     * @since 2.8.2
+     * @since 2.8.3
      *
      * @return string
      */
@@ -406,7 +440,7 @@ class Dokan_Shipping_Tracking {
     /**
      * Get shipping status
      *
-     * @since 2.8.2
+     * @since 2.8.3
      *
      * @return string
      */
@@ -423,7 +457,7 @@ class Dokan_Shipping_Tracking {
     /**
      * Get shipping carriers
      *
-     * @since 2.8.2
+     * @since 2.8.3
      *
      * @return mixed|void
      */
