@@ -670,10 +670,10 @@ function dokan_get_seller_earnings( $seller_id, $start_date = '', $end_date = ''
     }
 
     $all_orders = dokan_get_seller_orders_by_date( $start_date, $end_date, $seller_id, dokan_withdraw_get_active_order_status() );
-    $earnings = 0;
+    $earnings   = 0;
 
     foreach ( $all_orders as $order ) {
-        $earnings = $earnings + dokan_get_seller_amount_from_order( $order->order_id );
+        $earnings = $earnings + $order->net_amount;
     }
 
     return apply_filters( 'dokan_get_seller_earnings', $earnings, $seller_id );
