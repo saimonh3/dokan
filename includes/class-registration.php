@@ -13,7 +13,7 @@ class Dokan_Registration {
         add_shortcode( 'dokan-vendor-registration', array( $this, 'render_shortcode' ) );
 
         // validate registration
-        add_filter( 'woocommerce_process_registration_errors', array( $this, 'validate_registration' ) );
+        add_filter( 'woocommerce_process_registration_errors', array( $this, 'validate_registration_process' ) );
         add_filter( 'woocommerce_registration_errors', array( $this, 'validate_registration' ) );
 
         // after registration
@@ -54,7 +54,7 @@ class Dokan_Registration {
      *
      * @return \WP_Error
      */
-    function validate_registration( $error ) {
+    function validate_registration_process( $error ) {
         $post_data = wp_unslash( $_POST );
 
         $nonce_value = isset( $post_data['_wpnonce'] ) ? $post_data['_wpnonce'] : '';
@@ -92,6 +92,44 @@ class Dokan_Registration {
     }
 
     /**
+     * Validate vendor registration
+     *
+     * @param  \WP_Error $error
+     *
+     * @return \WP_Error
+     */
+    function validate_registration( $error ) {
+        $post_data = wp_unslash( $_POST );
+
+        $allowed_roles = apply_filters( 'dokan_register_user_role', array( 'customer', 'seller' ) );
+
+        // is the role name allowed or user is trying to manipulate?
+        if ( isset( $post_data['role'] ) && !in_array( $post_data['role'], $allowed_roles ) ) {
+            return new WP_Error( 'role-error', __( 'Cheating, eh?', 'dokan-lite' ) );
+        }
+
+        $role = $post_data['role'];
+
+        $required_fields = apply_filters( 'dokan_seller_registration_required_fields', array(
+            'fname'    => __( 'Please enter your first name.', 'dokan-lite' ),
+            'lname'    => __( 'Please enter your last name.', 'dokan-lite' ),
+            'phone'    => __( 'Please enter your phone number.', 'dokan-lite' ),
+            'shopname' => __( 'Please provide a shop name.', 'dokan-lite' ),
+        ) );
+
+        if ( $role == 'seller' ) {
+            foreach ( $required_fields as $field => $msg ) {
+                if ( empty( trim( $post_data[$field] ) ) ) {
+                    return new WP_Error( "$field-error", $msg );
+                }
+            }
+        }
+
+        return $error;
+    }
+
+
+    /**
      * Inject first and last name to WooCommerce for new vendor registraion
      *
      * @param array $data
@@ -99,13 +137,6 @@ class Dokan_Registration {
      */
     function set_new_vendor_names( $data ) {
         $post_data = wp_unslash( $_POST );
-
-        $nonce_value = isset( $post_data['_wpnonce'] ) ? $post_data['_wpnonce'] : '';
-        $nonce_value = isset( $post_data['woocommerce-register-nonce'] ) ? $post_data['woocommerce-register-nonce'] : $nonce_value;
-
-        if ( ! wp_verify_nonce( $nonce_value, 'woocommerce-register' ) ) {
-            return new WP_Error( 'nonce_verification_failed', __( 'Nonce verification failed', 'dokan-lite' ) );
-        }
 
         $allowed_roles = array( 'customer', 'seller' );
         $role          = ( isset( $post_data['role'] ) && in_array( $post_data['role'], $allowed_roles ) ) ? $post_data['role'] : 'customer';
@@ -133,13 +164,6 @@ class Dokan_Registration {
      */
     function save_vendor_info( $user_id, $data ) {
         $post_data = wp_unslash( $_POST );
-
-        $nonce_value = isset( $post_data['_wpnonce'] ) ? $post_data['_wpnonce'] : '';
-        $nonce_value = isset( $post_data['woocommerce-register-nonce'] ) ? $post_data['woocommerce-register-nonce'] : $nonce_value;
-
-        if ( ! wp_verify_nonce( $nonce_value, 'woocommerce-register' ) ) {
-            return new WP_Error( 'nonce_verification_failed', __( 'Nonce verification failed', 'dokan-lite' ) );
-        }
 
         if ( $data['role'] != 'seller' ) {
             return;
