@@ -541,6 +541,38 @@ class Dokan_Vendor {
     }
 
     /**
+     * Get out of stock products
+     *
+     * @since DOKAN_LITE_SINCE
+     *
+     * @return array | null on failure
+     */
+    public function get_out_of_stock_products() {
+        $products = dokan()->product->out_of_stocks( [
+            'author' => $this->id,
+            'fields' => 'ids' // todo: add this with filter
+        ] );
+
+        return $products ? $products : null;
+    }
+
+    /**
+     * Get low stock products
+     *
+     * @since DOKAN_LITE_SNICE
+     *
+     * @return array
+     */
+    public function get_low_stock_products() {
+        $products = dokan()->product->low_stocks( [
+            'author' => $this->id,
+            'fields' => 'ids' // todo: add this with filter
+        ] );
+
+        return $products ? $products : null;
+    }
+
+    /**
      * Get the total sales amount of this vendor
      *
      * @return float
@@ -844,6 +876,28 @@ class Dokan_Vendor {
      */
     public function get_store_close_notice() {
         return $this->get_info_part( 'dokan_store_close_notice' );
+    }
+
+    /**
+     * Check whether out of stock notifications is enabled or not
+     *
+     * @since DOKAN_LITE_SINCE
+     *
+     * @return boolean
+     */
+    public function is_out_of_stock_notifications_enabled() {
+        return 'yes' === $this->get_info_part( 'out_of_stock_notifications' );
+    }
+
+    /**
+     * Check whether low stock notifications is enabled or not
+     *
+     * @since DOKAN_LITE_SINCE
+     *
+     * @return boolean
+     */
+    public function is_low_stock_notifications_enabled() {
+        return 'yes' === $this->get_info_part( 'low_stock_notifications' );
     }
 
     /*

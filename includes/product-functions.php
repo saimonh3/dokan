@@ -585,3 +585,37 @@ function dokan_get_vendor_by_product( $id ) {
 
     return dokan()->vendor->get( $vendor_id );
 }
+
+/**
+ * Get stock notifications intervals
+ *
+ * @return array
+ */
+function dokan_get_stock_notifications_intervals() {
+    return apply_filters( 'dokan_get_stock_notifications_intervals', [
+        'daily', 'weekly'
+    ] );
+}
+
+function dokan_get_translated_notifications_intervals( $interval ) {
+    $intervals = apply_filters( 'dokan_get_translated_notifications_intervals', [
+        'daily'  => __( 'Daily', 'dokan-lite' ),
+        'weekly' => __( 'Weekly', 'dokan-lite' )
+    ] );
+
+    return isset( $intervals[$interval] ) ? $intervals[$interval] : '';
+}
+
+/**
+ * Check if woocommerce stock management is enabled or not
+ *
+ * @return boolean
+ */
+function dokan_is_wc_mange_stock() {
+    return 'yes' === get_option( 'woocommerce_manage_stock' );
+}
+
+// testing wheter sending email or not
+add_action( 'send_out_of_notifications_email', function( $products ) {
+    error_log( var_export( 'sending mails', true ) );
+} );

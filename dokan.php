@@ -344,6 +344,7 @@ final class WeDevs_Dokan {
         require_once $inc_dir . 'class-order-manager.php';
         require_once $inc_dir . 'class-product-manager.php';
         require_once $inc_dir . 'class-dokan-privacy.php';
+        require_once $inc_dir . 'class-stock-notifications.php';
 
         if ( is_admin() ) {
             require_once $inc_dir . 'admin/class-settings.php';
@@ -364,6 +365,7 @@ final class WeDevs_Dokan {
         // Background Processes
         require_once $inc_dir . 'background-processes/class-dokan-background-processes.php';
         require_once $inc_dir . 'background-processes/abstract-class-dokan-background-processes.php';
+        require_once $inc_dir . 'background-processes/class-dokan-stock-notifications-background-process.php';
     }
 
     /**
@@ -380,18 +382,19 @@ final class WeDevs_Dokan {
             new Dokan_Promotion();
         }
 
-        $this->container['pageview']      = new Dokan_Pageviews();
-        $this->container['rewrite']       = new Dokan_Rewrites();
-        $this->container['seller_wizard'] = new Dokan_Seller_Setup_Wizard();
-        $this->container['core']          = new Dokan_Core();
-        $this->container['scripts']       = new Dokan_Assets();
-        $this->container['email']         = Dokan_Email::init();
-        $this->container['vendor']        = new Dokan_Vendor_Manager();
-        $this->container['product']       = new Dokan_Product_Manager();
-        $this->container['shortcode']     = new Dokan_Shortcodes();
-        $this->container['registration']  = new Dokan_Registration();
-        $this->container['orders']        = new Dokan_Order_Manager();
-        $this->container['api']           = new Dokan_API_Manager();
+        $this->container['pageview']            = new Dokan_Pageviews();
+        $this->container['rewrite']             = new Dokan_Rewrites();
+        $this->container['seller_wizard']       = new Dokan_Seller_Setup_Wizard();
+        $this->container['core']                = new Dokan_Core();
+        $this->container['scripts']             = new Dokan_Assets();
+        $this->container['email']               = Dokan_Email::init();
+        $this->container['vendor']              = new Dokan_Vendor_Manager();
+        $this->container['product']             = new Dokan_Product_Manager();
+        $this->container['shortcode']           = new Dokan_Shortcodes();
+        $this->container['registration']        = new Dokan_Registration();
+        $this->container['orders']              = new Dokan_Order_Manager();
+        $this->container['stock_notifications'] = new Dokan_Stock_Notifications();
+        $this->container['api']                 = new Dokan_API_Manager();
 
         $this->container = apply_filters( 'dokan_get_class_container', $this->container );
 

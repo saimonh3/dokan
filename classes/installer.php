@@ -15,6 +15,7 @@ class Dokan_Installer {
         $this->woocommerce_settings();
         $this->create_tables();
         $this->product_design();
+        $this->create_cron_jobs();
 
         // does it needs any update?
         $updater = new Dokan_Upgrade();
@@ -458,4 +459,18 @@ class Dokan_Installer {
         return wp_kses_post( $upgrade_notice );
     }
 
+    /**
+     * Create cron jobs
+     *
+     * @DOKAN_LITE_SINCE
+     *
+     * @return void
+     */
+    protected function create_cron_jobs() {
+        if ( ! class_exists( 'Dokan_Cron_Jobs' ) ) {
+            require_once DOKAN_INC_DIR . '/class-dokan-cron-jobs.php';
+        }
+
+        new Dokan_Cron_Jobs;
+    }
 }
