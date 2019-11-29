@@ -359,6 +359,7 @@ final class WeDevs_Dokan {
         } else {
             require_once $inc_dir . 'template-tags.php';
             require_once $inc_dir . 'class-theme-support.php';
+            require_once $inc_dir . 'class-store-lists-filter.php';
         }
 
         // API includes
@@ -383,19 +384,19 @@ final class WeDevs_Dokan {
             new Dokan_Promotion();
         }
 
-        $this->container['pageview']      = new Dokan_Pageviews();
-        $this->container['rewrite']       = new Dokan_Rewrites();
-        $this->container['seller_wizard'] = new Dokan_Seller_Setup_Wizard();
-        $this->container['core']          = new Dokan_Core();
-        $this->container['scripts']       = new Dokan_Assets();
-        $this->container['email']         = Dokan_Email::init();
-        $this->container['vendor']        = new Dokan_Vendor_Manager();
-        $this->container['product']       = new Dokan_Product_Manager();
-        $this->container['shortcode']     = new Dokan_Shortcodes();
-        $this->container['registration']  = new Dokan_Registration();
-        $this->container['orders']        = new Dokan_Order_Manager();
-        $this->container['api']           = new Dokan_API_Manager();
-        $this->container['commission']    = Dokan_Commission::instance();
+        $this->container['pageview']           = new Dokan_Pageviews();
+        $this->container['rewrite']            = new Dokan_Rewrites();
+        $this->container['seller_wizard']      = new Dokan_Seller_Setup_Wizard();
+        $this->container['core']               = new Dokan_Core();
+        $this->container['scripts']            = new Dokan_Assets();
+        $this->container['email']              = Dokan_Email::init();
+        $this->container['vendor']             = new Dokan_Vendor_Manager();
+        $this->container['product']            = new Dokan_Product_Manager();
+        $this->container['shortcode']          = new Dokan_Shortcodes();
+        $this->container['registration']       = new Dokan_Registration();
+        $this->container['orders']             = new Dokan_Order_Manager();
+        $this->container['api']                = new Dokan_API_Manager();
+        $this->container['commission']         = Dokan_Commission::instance();
 
         $this->container = apply_filters( 'dokan_get_class_container', $this->container );
 
@@ -410,6 +411,7 @@ final class WeDevs_Dokan {
 
         if ( ! is_admin() ) {
             new Dokan_Theme_Support();
+            Dokan_Store_Lists_Filter::instance();
         }
 
         if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {

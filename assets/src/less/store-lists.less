@@ -1,0 +1,203 @@
+#dokan-store-listing-filter-wrap {
+    background: #ffffff;
+    padding: 20px;
+    box-shadow: 1px 1px 20px 0px #E9E9E9;
+    display: flex;
+    justify-content: space-between;
+
+    .left {
+        .store-count {
+            margin-top: 10px;
+        }
+    }
+    .right {
+        display: flex;
+
+        .item {
+            &:not(:first-child) {
+                padding-left: 40px;
+            }
+
+            button {
+                padding: 8px 25px;
+            }
+
+            select {
+                background: #ffffff;
+                border-color: #edecec;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                padding: 8px 20px;
+
+                &:before {
+                    content: "\f140";
+                }
+            }
+        }
+
+        .toggle-view {
+            margin-top: 8px;
+
+            .dashicons {
+                font-size: 22px;
+                cursor: pointer;
+            }
+
+            .active {
+                color: #ee5035;
+            }
+        }
+    }
+}
+
+
+#dokan-store-listing-filter-form-wrap {
+    background: #ffffff;
+    margin-top: 25px;
+    padding: 20px;
+    box-shadow: 1px 1px 20px 0px #E9E9E9;
+
+    &:before {
+        content: "\f142";
+        position: relative;
+        top: -35px;
+        transform: translate(45%, 0);
+        left: 45%;
+        display: inline-block;
+        -webkit-font-smoothing: antialiased;
+        font-family: 'dashicons';
+        vertical-align: top;
+        font-size: 60px;
+        color: #ffffff;
+        font-weight: bold;
+    }
+
+    .store-search {
+        .store-search-input {
+            width: 100%;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: -11px;
+            border: 1.5px solid #e9e8e86b;
+
+            &:placeholder {
+                color: #7e7e7ec9;
+            }
+        }
+    }
+
+    .store-lists-other-filter-wrap {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 25px;
+
+        .store-lists-category {
+            width: 270px;
+            position: relative;
+
+            .category-input {
+                border: 2px solid #f5f4f4;
+                width: 250px;
+                border-radius: 4px;
+                padding: 10px 20px;
+                color: #8c8a8a;
+                cursor: pointer;
+
+                span {
+                    display: inline-block;
+                }
+            }
+
+            .category-box {
+                position: absolute;
+                background: #ffffff;
+                z-index: 99;
+                width: 400px;
+                box-shadow: 1px 1px 20px 0px #E9E9E9;
+                top: 58px;
+
+                &:before {
+                    content: "\f142";
+                    position: relative;
+                    top: -13px;
+                    right: 0;
+                    -webkit-font-smoothing: antialiased;
+                    font-family: 'dashicons';
+                    vertical-align: top;
+                    font-size: 30px;
+                    color: #ffffff;
+                    font-weight: bold;
+                    left: 42%;
+                }
+
+                ul {
+                    display: -webkit-box;
+                    display: -moz-box;
+                    display: -ms-flexbox;
+                    display: -moz-flex;
+                    display: -webkit-flex;
+                    list-style: none;
+                    flex-wrap: wrap;
+                    -webkit-flex-wrap: wrap;
+                    padding: 0px 20px 10px 20px;
+
+                    li {
+                        list-style: none;
+                        padding: 5px 10px;
+                        border: 1.5px solid #ededed;
+                        margin: 5px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+
+    .apply-filter {
+        display: flex;
+        justify-content: flex-end;
+
+        #apply-filter-btn {
+            padding: 8px 25px;
+        }
+    }
+}
+
+#dokan-seller-listing-wrap.list-view {
+    .dokan-seller-wrap {
+        .dokan-single-seller {
+            width: 100%;
+
+            .store-wrapper {
+                display: flex;
+                justify-content: space-between;
+
+                .store-content {
+                    padding: 20px;
+
+                    .store-info {
+                        height: 140px;
+                        width: 140px;
+                    }
+                }
+
+                .store-footer {
+                    .seller-avatar {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+.site-content {
+    .entry-header {
+        .entry-title {
+            border: none;
+        }
+    }
+}
