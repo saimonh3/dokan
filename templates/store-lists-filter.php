@@ -20,16 +20,23 @@ defined( 'ABSPATH' ) || exit; ?>
 <?php do_action( 'dokan_before_store_lists_filter', $stores ); ?>
 
 <div id="dokan-store-listing-filter-wrap">
+    <?php do_action( 'dokan_before_store_lists_filter_left', $stores ); ?>
     <div class="left">
         <p class="item store-count">
             <?php printf( '%1$s: %2$d', __( 'Total store showing', 'dokan-lite' ), $number_of_store ); ?>
         </p>
     </div>
 
+    <?php do_action( 'dokan_before_store_lists_filter_right', $stores ); ?>
     <div class="right">
         <div class="item">
+            <div class="dokan-icons">
+                <div class="dokan-icon-div"></div>
+                <div class="dokan-icon-div"></div>
+                <div class="dokan-icon-div"></div>
+            </div>
+
             <button class="dokan-store-list-filter-button dokan-btn dokan-btn-theme">
-                <span class="dashicons dashicons-menu"></span>
                 <?php esc_html_e( 'Filter', 'dokan-lite' ); ?>
             </button>
         </div>
@@ -57,44 +64,22 @@ defined( 'ABSPATH' ) || exit; ?>
 <?php do_action( 'dokan_before_store_lists_filter_form', $stores ); ?>
 
 <form id="dokan-store-listing-filter-form-wrap" style="display: none">
-    <?php do_action( 'dokan_before_store_lists_filter_search', $stores ); ?>
 
-    <div class="store-search grid-item">
-        <input type="search" class="store-search-input" name="store-search" placeholder="<?php esc_html_e( 'Search Stores', 'dokan-lite' ); ?>">
-    </div>
+    <?php
+        do_action( 'dokan_before_store_lists_filter_search', $stores );
 
-    <?php do_action( 'dokan_before_store_lists_filter_category', $stores ); ?>
-
-    <div class="store-lists-other-filter-wrap">
-        <div class="store-lists-category item">
-            <div class="category-input">
-                <span class="category-label">
-                    <?php esc_html_e( 'Category:', 'dokan-lite' ); ?>
-                </span>
-                <span class="category-items">
-                </span>
+        if ( apply_filters( 'dokan_load_store_lists_filter_search_bar', true ) ) : ?>
+            <div class="store-search grid-item">
+                <input type="search" class="store-search-input" name="store-search" placeholder="<?php esc_html_e( 'Search Vendors', 'dokan-lite' ); ?>">
             </div>
+        <?php endif;
 
-            <div class="category-box" style="display: none">
-                <ul>
-                    <li>Electronics</li>
-                    <li>House Hold</li>
-                    <li>Computer</li>
-                    <li>Digital</li>
-                    <li>TV</li>
-                    <li>Fridge</li>
-                    <li>Others</li>
-                </ul>
-            </div>
-        </div>
-
-        <?php do_action( 'dokan_after_store_lists_filter_category', $stores ); ?>
-    </div>
-
-    <?php do_action( 'dokan_before_store_lists_filter_apply_button', $stores ); ?>
+        do_action( 'dokan_before_store_lists_filter_apply_button', $stores );
+    ?>
 
     <div class="apply-filter">
         <button id="apply-filter-btn" class="dokan-btn dokan-btn-theme" type="submit"><?php esc_html_e( 'Apply', 'dokan-lite' ); ?></button>
     </div>
 
+    <?php do_action( 'dokan_after_store_lists_filter_apply_button', $stores ); ?>
 </form>

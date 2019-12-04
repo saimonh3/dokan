@@ -42,10 +42,19 @@ class Dokan_Store_Lists_Filter {
         ] );
     }
 
+    /**
+     * Get sort by options
+     *
+     * @since  DOKAN_LITE_SINCE
+     *
+     * @return array
+     */
     public function sort_by_options() {
         return apply_filters( 'dokan_store_lists_sort_by_options', [
-            'rating' => 'Store Rating',
-            'price' => 'Product Price'
+            'top_rated'     => __( 'Top Rated', 'dokan-lite' ),
+            'total_orders'  => __( 'Total Orders', 'dokan-lite' ),
+            'most_recent'   => __( 'Most Recent', 'dokan-lite' ),
+            'most_reviewed' => __( 'Most Reviewed', 'dokan-lite' )
         ] );
     }
 }

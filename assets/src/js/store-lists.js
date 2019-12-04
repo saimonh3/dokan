@@ -8,22 +8,13 @@
         query: {},
 
         /**
-         * Items array holder
-         *
-         * @type array
-         */
-        itemsArray: [],
-
-        /**
          * Init all the methods
          *
          * @return void
          */
         init: function() {
             $( '#dokan-store-listing-filter-wrap .toggle-view span' ).on( 'click', this.toggleView );
-            $( '#dokan-store-listing-filter-wrap .dokan-store-list-filter-button' ).on( 'click', this.toggleForm );
-            $( '#dokan-store-listing-filter-form-wrap .store-lists-category .category-input' ).on( 'click', this.toggleCategory );
-            $( '#dokan-store-listing-filter-form-wrap .store-lists-category .category-box ul li' ).on( 'click', this.selectCategory );
+            $( '#dokan-store-listing-filter-wrap .dokan-store-list-filter-button, #dokan-store-listing-filter-wrap .dokan-icons ' ).on( 'click', this.toggleForm );
 
             // Build query string
             $( '#dokan-store-listing-filter-form-wrap .store-search-input' ).on( 'change', this.buildSearchQuery );
@@ -38,6 +29,15 @@
                 const toggleBtns = $( '.toggle-view span' );
                 self.setView( view, toggleBtns );
             }
+
+            // const params = self.getParams();
+
+            // params.forEach( function( value ) {
+            //     value.forEach(function(v,k) {
+            //         console.log(k);
+            //     })
+            //         // self.setParam( key, value );
+            // });
         },
 
         /**
@@ -103,49 +103,6 @@
         },
 
         /**
-         * Toggle category
-         *
-         * @return void
-         */
-        toggleCategory: function() {
-            $( '.store-lists-category .category-box' ).slideToggle();
-        },
-
-        /**
-         * Select Category
-         *
-         * @param  string event
-         *
-         * @return void
-         */
-        selectCategory: function( event ) {
-            const item = $( event.target );
-            const currentItem = item.text();
-            const categoryHolder = $( '.category-items' );
-            const self = storeLists;
-
-            item.toggleClass('dokan-btn-theme');
-
-            if ( ! self.itemsArray.includes( currentItem ) ) {
-                self.itemsArray.push( currentItem );
-            } else {
-                itemToRemove = self.itemsArray.indexOf( currentItem );
-                self.itemsArray.splice( itemToRemove, 1 );
-            }
-
-            // building query string
-            self.query.categories = self.itemsArray;
-
-            const itemString = self.itemsArray.join( ', ' );
-
-            if ( itemString.length > 15 ) {
-                categoryHolder.text( ' ' ).append( itemString.substr( 0, 15 ) + '...' );
-            } else {
-                categoryHolder.text( ' ' ).append( self.itemsArray.join( ', ' ) );
-            }
-        },
-
-        /**
          * Build Search Query
          *
          * @param  string event
@@ -154,6 +111,12 @@
          */
         buildSearchQuery: function( event ) {
             storeLists.query.search = event.target.value;
+
+            // const self = storeLists;
+
+            // self.setParam( 'search', event.target.value );
+
+            // console.log('load')
         },
 
         /**
@@ -167,6 +130,8 @@
             event.preventDefault();
 
             const queryString = $.param( storeLists.query );
+            // const queryString = decodeURIComponent( $.param( storeLists.query ) );
+            console.log(queryString);
 
             window.history.pushState( null, null, `?${queryString}` );
             window.location.reload();
@@ -193,13 +158,32 @@
          */
         getLocal: function( key ) {
             return window.localStorage.getItem( key );
-        }
+        },
+
+        // setParam: function( key, value ) {
+            // storeLists.query.key = value;
+            // console.log(storeLists.query)
+            // console.log({key: key})
+            // console.log({value: value})
+        // },
+
+        // getParams: function() {
+        //     const params = new URLSearchParams( location.search );
+        //     const allParams = [];
+
+        //     params.forEach( function( value, key ) {
+        //         allParams.push( {
+        //             [key]: value
+        //         } );
+        //     });
+
+        //     return allParams;
+        // }
     };
 
-    /**
-     * Lets run
-     *
-     * @return void
-     */
-    storeLists.init();
+    if ( window.dokan ) {
+        window.dokan.storeLists = storeLists;
+        window.dokan.storeLists.init();
+    }
+
 })(jQuery);
