@@ -239,11 +239,11 @@ class Dokan_Shortcodes {
 
         // if search is enabled, perform a search
         if ( 'yes' == $attr['search'] ) {
-            if ( ! empty( $_get_data['search'] ) ) {
+            if ( ! empty( $_get_data['dokan_seller_search'] ) ) {
                 $seller_args['meta_query'] = [
                     [
                         'key'     => 'dokan_store_name',
-                        'value'   => wc_clean( $_get_data['search'] ),
+                        'value'   => wc_clean( $_get_data['dokan_seller_search'] ),
                         'compare' => 'LIKE'
                     ]
                 ];

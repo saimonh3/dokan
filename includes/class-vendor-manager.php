@@ -81,29 +81,6 @@ class Dokan_Vendor_Manager {
         $user_query = new WP_User_Query( $args );
         $results    = $user_query->get_results();
 
-
-        // if ( ! empty( $args['is_open'] ) && 'yes' === $args['is_open'] ) {
-        //     $stores_to_exclude = [];
-
-        //     foreach ( $results as $result ) {
-        //         $vendor = $this->get( $result );
-
-        //         if ( ! dokan_is_store_open( $vendor->get_id() ) ) {
-        //             array_push( $stores_to_exclude, $vendor->get_id() );
-        //             error_log( print_r( $vendor->get_id(), true ) );
-
-        //             continue;
-        //         }
-
-        //         $vendors[] = $vendor;
-        //     }
-
-        //     $this->total_users = $user_query->total_users - count( $stores_to_exclude );
-
-        //     return $vendors;
-        // }
-
-
         $this->total_users = $user_query->total_users;
 
         foreach ( $results as $key => $result ) {

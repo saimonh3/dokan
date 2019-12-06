@@ -7,12 +7,17 @@
          */
         query: {},
 
+        paramArray: [],
+
+        form: null,
+
         /**
          * Init all the methods
          *
          * @return void
          */
         init: function() {
+            $( '#dokan-store-listing-filter-wrap .sort-by #stores_orderby' ).on( 'change', this.buildSortByQuery );
             $( '#dokan-store-listing-filter-wrap .toggle-view span' ).on( 'click', this.toggleView );
             $( '#dokan-store-listing-filter-wrap .dokan-store-list-filter-button, #dokan-store-listing-filter-wrap .dokan-icons ' ).on( 'click', this.toggleForm );
 
@@ -23,6 +28,9 @@
             $( '#dokan-store-listing-filter-form-wrap .apply-filter #apply-filter-btn' ).on( 'click', this.submitForm );
 
             const self = storeLists;
+
+            self.form = document.forms.dokan_store_lists_filter_form;
+
             const view = self.getLocal( 'dokan-layout' );
 
             if ( view ) {
@@ -30,14 +38,33 @@
                 self.setView( view, toggleBtns );
             }
 
-            // const params = self.getParams();
+            const params = self.getParams();
 
-            // params.forEach( function( value ) {
-            //     value.forEach(function(v,k) {
-            //         console.log(k);
-            //     })
-            //         // self.setParam( key, value );
-            // });
+            if ( params.length ) {
+                let openTheForm = false;
+
+                params.forEach( function( param ) {
+                    const keys = Object.keys( param );
+                    const values = Object.values( param );
+
+                    if ( ! keys.includes( 'stores_orderby' ) || params.length > 1 ) {
+                        openTheForm = true;
+                    }
+
+                    self.setParams( keys, values );
+                });
+
+                if ( openTheForm ) {
+                    $( '#dokan-store-listing-filter-form-wrap' ).slideToggle();
+                }
+            }
+        },
+
+        buildSortByQuery: function( event ) {
+            const self = storeLists;
+
+            self.query.stores_orderby = event.target.value;
+            self.submitForm( event );
         },
 
         /**
@@ -99,7 +126,7 @@
         toggleForm: function( event ) {
             event.preventDefault();
 
-            $('#dokan-store-listing-filter-form-wrap').slideToggle();
+            $( '#dokan-store-listing-filter-form-wrap' ).slideToggle();
         },
 
         /**
@@ -110,13 +137,7 @@
          * @return void
          */
         buildSearchQuery: function( event ) {
-            storeLists.query.search = event.target.value;
-
-            // const self = storeLists;
-
-            // self.setParam( 'search', event.target.value );
-
-            // console.log('load')
+            storeLists.query.dokan_seller_search = event.target.value;
         },
 
         /**
@@ -129,8 +150,8 @@
         submitForm: function( event ) {
             event.preventDefault();
 
-            const queryString = $.param( storeLists.query );
-            // const queryString = decodeURIComponent( $.param( storeLists.query ) );
+            // const queryString = $.param( storeLists.query );
+            const queryString = decodeURIComponent( $.param( storeLists.query ) );
             console.log(queryString);
 
             window.history.pushState( null, null, `?${queryString}` );
@@ -160,25 +181,68 @@
             return window.localStorage.getItem( key );
         },
 
-        // setParam: function( key, value ) {
-            // storeLists.query.key = value;
-            // console.log(storeLists.query)
-            // console.log({key: key})
-            // console.log({value: value})
-        // },
+        setParams: function( key, value ) {
+            const self = storeLists;
+            const elements = self.form.elements;
 
-        // getParams: function() {
-        //     const params = new URLSearchParams( location.search );
-        //     const allParams = [];
+            const sortBy = $( '#dokan-store-listing-filter-wrap .sort-by' );
+            sortBy.find( $( '#' + key[0] ) ).val( value[0] );
 
-        //     params.forEach( function( value, key ) {
-        //         allParams.push( {
-        //             [key]: value
-        //         } );
-        //     });
 
-        //     return allParams;
-        // }
+
+            // on reload, if query string exists, set the form input elment value
+            Object.values( elements ).forEach( function( element ) {
+                if ( key.includes( element.name ) ) {
+                    if ( element.type === 'checkbox' ) {
+                        element.checked = ['yes', 'true', '1'].includes( value[0] ) ? true : false;
+                    } else if ( [ 'text', 'search' ].includes( element.type ) ) {
+                        element.value = value[0];
+                    }
+                }
+
+                if ( key[0].includes( '[' ) ) {
+                    const trimedValue = value[0].split( ' ' ).join( '-' );
+
+                    $( `[data-slug=${trimedValue}]` ).addClass( 'dokan-btn-theme' );
+                } else {
+                    const trimedValue = value[0].split( ' ' ).join( '-' );
+
+                    $( `[data-${key[0]}=${trimedValue}]` ).addClass( 'active' );
+                    $( `[data-rating=${trimedValue}]` ).parent().addClass( 'selected' );
+                }
+            });
+
+            // set the query strings
+            // if ( typeof key === 'string' ) {
+            //     self.query[key] = value;
+            // } else {
+                // setting params from the $_GET variable
+                // key.forEach( function( param, index ) {
+                //     const charIndex = param.indexOf( '[' );
+
+                //     // If charIndex is greater than 0, then it's an array
+                //     if ( charIndex > 0 ) {
+                //         self.paramArray.push( value[ index ] );
+                //         self.query[ param.substr( 0, charIndex ) ] = self.paramArray
+                //     } else {
+                //         self.query[ param ] = value[ index ];
+                //     }
+                // });
+            // }
+        },
+
+        getParams: function() {
+            const params = new URLSearchParams( location.search );
+            const allParams = [];
+
+            params.forEach( function( value, key ) {
+                allParams.push( {
+                    [key]: value
+                } );
+            });
+
+            return allParams;
+        }
     };
 
     if ( window.dokan ) {

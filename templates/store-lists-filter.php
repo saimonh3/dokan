@@ -41,10 +41,10 @@ defined( 'ABSPATH' ) || exit; ?>
             </button>
         </div>
 
-        <div class="sort-by item">
+        <form class="sort-by item" method="get">
             <label><?php esc_html_e( 'Sort by', 'dokan-lite' ); ?>:</label>
 
-            <select name="store_sort_filter">
+            <select name="stores_orderby" id="stores_orderby" aria-label="<?php esc_html_e( 'Sort by', 'dokan-lite' ); ?>">
                 <?php
                     foreach ( $sort_filters as $key => $filter ) {
                         $optoins = "<option value='${key}'>${filter}</option>";
@@ -52,7 +52,7 @@ defined( 'ABSPATH' ) || exit; ?>
                     }
                 ?>
             </select>
-        </div>
+        </form>
 
         <div class="toggle-view item">
             <span class="dashicons dashicons-screenoptions" data-view="grid-view"></span>
@@ -63,14 +63,14 @@ defined( 'ABSPATH' ) || exit; ?>
 
 <?php do_action( 'dokan_before_store_lists_filter_form', $stores ); ?>
 
-<form id="dokan-store-listing-filter-form-wrap" style="display: none">
+<form role="store-list-filter" name="dokan_store_lists_filter_form" id="dokan-store-listing-filter-form-wrap" style="display: none">
 
     <?php
         do_action( 'dokan_before_store_lists_filter_search', $stores );
 
         if ( apply_filters( 'dokan_load_store_lists_filter_search_bar', true ) ) : ?>
             <div class="store-search grid-item">
-                <input type="search" class="store-search-input" name="store-search" placeholder="<?php esc_html_e( 'Search Vendors', 'dokan-lite' ); ?>">
+                <input type="search" class="store-search-input" name="dokan_seller_search" placeholder="<?php esc_html_e( 'Search Vendors', 'dokan-lite' ); ?>">
             </div>
         <?php endif;
 
