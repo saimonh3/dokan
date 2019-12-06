@@ -41,7 +41,7 @@ defined( 'ABSPATH' ) || exit; ?>
             </button>
         </div>
 
-        <form class="sort-by item" method="get">
+        <form name="stores_sorting" class="sort-by item" method="get">
             <label><?php esc_html_e( 'Sort by', 'dokan-lite' ); ?>:</label>
 
             <select name="stores_orderby" id="stores_orderby" aria-label="<?php esc_html_e( 'Sort by', 'dokan-lite' ); ?>">

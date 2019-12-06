@@ -2139,9 +2139,9 @@ jQuery(function($) {
          */
         query: {},
 
-        paramArray: [],
-
         form: null,
+
+        cateItemStringArray: [],
 
         /**
          * Init all the methods
@@ -2317,10 +2317,13 @@ jQuery(function($) {
             const self = storeLists;
             const elements = self.form.elements;
 
-            const sortBy = $( '#dokan-store-listing-filter-wrap .sort-by' );
-            sortBy.find( $( '#' + key[0] ) ).val( value[0] );
+            const sortingForm = document.forms.stores_sorting;
 
-
+            Object.values( sortingForm.elements ).forEach( function( element ) {
+                if ( element.name === key[0] ) {
+                    $( element ).val( value[0] );
+                }
+            });
 
             // on reload, if query string exists, set the form input elment value
             Object.values( elements ).forEach( function( element ) {
@@ -2332,11 +2335,18 @@ jQuery(function($) {
                     }
                 }
 
-                if ( key[0].includes( '[' ) ) {
-                    const trimedValue = value[0].split( ' ' ).join( '-' );
 
-                    $( `[data-slug=${trimedValue}]` ).addClass( 'dokan-btn-theme' );
-                } else {
+                if ( key[0] === 'store_category[]' && key[0].includes( '[' ) ) {
+                    const trimedValue = value[0].split( ' ' ).join( '-' );
+                    const cateItem = $( `[data-slug=${trimedValue}]` );
+
+                    if ( ! self.cateItemStringArray.includes( cateItem.text().trim() ) ) {
+                        self.cateItemStringArray.push( cateItem.text().trim() );
+                    }
+
+                    cateItem.addClass( 'dokan-btn-theme' );
+
+                } else if ( key[0] === 'rating' ) {
                     const trimedValue = value[0].split( ' ' ).join( '-' );
 
                     $( `[data-${key[0]}=${trimedValue}]` ).addClass( 'active' );
@@ -2344,23 +2354,11 @@ jQuery(function($) {
                 }
             });
 
-            // set the query strings
-            // if ( typeof key === 'string' ) {
-            //     self.query[key] = value;
-            // } else {
-                // setting params from the $_GET variable
-                // key.forEach( function( param, index ) {
-                //     const charIndex = param.indexOf( '[' );
-
-                //     // If charIndex is greater than 0, then it's an array
-                //     if ( charIndex > 0 ) {
-                //         self.paramArray.push( value[ index ] );
-                //         self.query[ param.substr( 0, charIndex ) ] = self.paramArray
-                //     } else {
-                //         self.query[ param ] = value[ index ];
-                //     }
-                // });
-            // }
+            key.forEach( function( param, index ) {
+                if ( ! param.includes( '[' ) ) {
+                    self.query[ param ] = value[ index ];
+                }
+            });
         },
 
         getParams: function() {
