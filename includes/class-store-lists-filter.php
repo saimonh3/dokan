@@ -73,7 +73,7 @@ class Dokan_Store_Lists_Filter {
             $orderby = wc_clean( $request['stores_orderby'] );
             $args['orderby'] = $orderby;
 
-            add_action( 'pre_user_query', array( $this, 'filter_user_query' ) );
+            add_action( 'pre_user_query', array( $this, 'filter_user_query' ), 9 );
         }
 
         return $args;

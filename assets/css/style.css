@@ -4610,6 +4610,9 @@ div.media-sidebar a.edit-attachment {
   position: relative;
   z-index: 99;
 }
+#dokan-seller-listing-wrap .seller-listing-content .dokan-error {
+  margin: 15px;
+}
 #dokan-seller-listing-wrap .dokan-single-seller .store-wrapper .store-header .store-banner {
   min-height: 220px;
   position: relative;
