@@ -34,7 +34,7 @@ class Dokan_Store_Lists_Filter {
      * @return void
      */
     public function hooks() {
-        $this->maybe_load_store_lists_filter();
+        $this->maybe_disable_stote_lists_filter();
 
         add_action( 'dokan_store_lists_filter_form', [ $this, 'filter_area' ] );
         add_filter( 'dokan_seller_listing_args', [ $this, 'filter_pre_user_query' ], 10, 2 );
@@ -48,10 +48,17 @@ class Dokan_Store_Lists_Filter {
         } );
     }
 
-    public function maybe_load_store_lists_filter() {
-        $valid = dokan()->is_pro_exists() && version_compare( dokan_pro()->version, '2.9.16', '>' );
+    /**
+     * Maybe disable the store lists filter form
+     *
+     * @since  DOKAN_LITE_SINCE
+     *
+     * @return void
+     */
+    public function maybe_disable_stote_lists_filter() {
+        $not_valid = class_exists( 'Dokan_Geolocation' ) && version_compare( dokan_pro()->version, '2.9.17', '<' );
 
-        if ( ! $valid ) {
+        if ( $not_valid ) {
             add_filter( 'dokan_store_lists_filter', '__return_false' );
         }
     }

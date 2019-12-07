@@ -4524,6 +4524,9 @@ div.media-sidebar a.edit-attachment {
   padding-left: 35px;
   padding-right: 25px;
 }
+#dokan-store-listing-filter-wrap .right .item button:focus {
+  outline: none;
+}
 #dokan-store-listing-filter-wrap .right .item select {
   background: #ffffff;
   border-color: #edecec;
@@ -4571,12 +4574,16 @@ div.media-sidebar a.edit-attachment {
 #dokan-store-listing-filter-form-wrap .store-search .store-search-input {
   width: 100%;
   padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 3px;
   margin-top: -11px;
-  border: 1.5px solid #e9e8e86b;
+  border: 1px solid #cccccc;
 }
 #dokan-store-listing-filter-form-wrap .store-search .store-search-input:placeholder {
   color: #7e7e7ec9;
+}
+#dokan-store-listing-filter-form-wrap .store-search .store-search-input:focus {
+  outline: none;
+  border-color: #8080809e;
 }
 #dokan-store-listing-filter-form-wrap .apply-filter {
   display: flex;
@@ -4584,6 +4591,10 @@ div.media-sidebar a.edit-attachment {
 }
 #dokan-store-listing-filter-form-wrap .apply-filter #apply-filter-btn {
   padding: 8px 25px;
+  margin-top: 15px;
+}
+#dokan-store-listing-filter-form-wrap .apply-filter #apply-filter-btn:focus {
+  outline: none;
 }
 .site-content .entry-header .entry-title[class] {
   border: none;
