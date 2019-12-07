@@ -2139,8 +2139,18 @@ jQuery(function($) {
          */
         query: {},
 
+        /**
+         * Form holder
+         *
+         * @type object
+         */
         form: null,
 
+        /**
+         * Category item string holder
+         *
+         * @type array
+         */
         cateItemStringArray: [],
 
         /**
@@ -2361,6 +2371,11 @@ jQuery(function($) {
             });
         },
 
+        /**
+         * Get params from
+         *
+         * @return array
+         */
         getParams: function() {
             const params = new URLSearchParams( location.search );
             const allParams = [];

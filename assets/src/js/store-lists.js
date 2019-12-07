@@ -7,8 +7,18 @@
          */
         query: {},
 
+        /**
+         * Form holder
+         *
+         * @type object
+         */
         form: null,
 
+        /**
+         * Category item string holder
+         *
+         * @type array
+         */
         cateItemStringArray: [],
 
         /**
@@ -229,6 +239,11 @@
             });
         },
 
+        /**
+         * Get params from
+         *
+         * @return array
+         */
         getParams: function() {
             const params = new URLSearchParams( location.search );
             const allParams = [];

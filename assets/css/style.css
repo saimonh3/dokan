@@ -4643,15 +4643,15 @@ div.media-sidebar a.edit-attachment {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: 20px;
+  padding: 20px 50px 20px 15px;
   background: #fff;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 #dokan-seller-listing-wrap.list-view .dokan-seller-wrap .dokan-single-seller .store-wrapper .store-header .store-banner {
   min-height: 180px;
 }
 #dokan-seller-listing-wrap.list-view .dokan-seller-wrap .dokan-single-seller .store-wrapper .store-header .store-banner img {
-  border-radius: 5px;
+  border-radius: 3px;
 }
 #dokan-seller-listing-wrap.list-view .dokan-seller-wrap .dokan-single-seller .store-wrapper .store-content .store-data-container .store-data h2 {
   margin-top: 0;
@@ -4692,6 +4692,9 @@ div.media-sidebar a.edit-attachment {
 }
 #dokan-seller-listing-wrap.list-view .dokan-seller-wrap .dokan-single-seller .store-wrapper .store-footer[class] .seller-avatar {
   display: none;
+}
+#dokan-seller-listing-wrap.list-view .dokan-seller-wrap .dokan-single-seller .store-wrapper .store-footer[class] button {
+  margin-left: 5px;
 }
 /*--------------------------------------------------
 :: Responsive Styles
