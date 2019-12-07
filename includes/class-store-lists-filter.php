@@ -36,6 +36,14 @@ class Dokan_Store_Lists_Filter {
     public function hooks() {
         add_action( 'dokan_store_lists_filter_form', [ $this, 'filter_area' ] );
         add_filter( 'dokan_seller_listing_args', [ $this, 'filter_pre_user_query' ], 10, 2 );
+
+        // remove these codes
+        add_action( 'shutdown', function() {
+            global $wpdb;
+
+            // error_log( print_r( $wpdb->queries, true ) );
+
+        } );
     }
 
     public function filter_area( $stores ) {
@@ -57,7 +65,6 @@ class Dokan_Store_Lists_Filter {
         return apply_filters( 'dokan_store_lists_sort_by_options', [
             'most_recent'   => __( 'Most Recent', 'dokan-lite' ),
             'total_orders'  => __( 'Total Orders', 'dokan-lite' ),
-            'top_rated'     => __( 'Top Rated', 'dokan-lite' ),
         ] );
     }
 
@@ -65,9 +72,9 @@ class Dokan_Store_Lists_Filter {
         if ( ! empty( $request['stores_orderby'] ) ) {
             $orderby = wc_clean( $request['stores_orderby'] );
             $args['orderby'] = $orderby;
-        }
 
-        add_action( 'pre_user_query', array( $this, 'filter_user_query' ) );
+            add_action( 'pre_user_query', array( $this, 'filter_user_query' ) );
+        }
 
         return $args;
     }
@@ -86,7 +93,7 @@ class Dokan_Store_Lists_Filter {
         global $wpdb;
 
         if ( 'total_orders' === $this->orderby ) {
-            $this->query->query_from .= "LEFT JOIN (
+            $this->query->query_from .= " LEFT JOIN (
                                 SELECT seller_id,
                                 COUNT(*) AS orders_count
                                 FROM {$wpdb->dokan_orders}
