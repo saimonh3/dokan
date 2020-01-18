@@ -102,7 +102,7 @@ class Dokan_Theme_Support_Flatsome {
 
         $style = '#dokan-seller-listing-wrap .store-content .store-data-container .store-data h2 a {text-decoration: none}';
         $style .= '#dokan-seller-listing-wrap .store-content .store-data-container .store-data h2 {font-size: 24px; margin: 20px 0 10px 0}';
-        $style .= '#dokan-store-listing-filter-form-wrap:before {top: -74px; height: 0}';
+        $style .= '#dokan-store-listing-filter-form-wrap:before {top: -58px; height: 0}';
         $style .= 'form.sort-by.item {margin-bottom: 0}';
         $style .= '#dokan-store-listing-filter-wrap .left .store-count {margin-bottom: 0}';
         $style .= '#dokan-store-listing-filter-wrap .right .sort-by.item label {display: inline-block}';
@@ -112,7 +112,7 @@ class Dokan_Theme_Support_Flatsome {
         $style .= '#dokan-seller-listing-wrap.list-view .dokan-seller-wrap .dokan-single-seller .store-wrapper .store-footer[class] button {text-transform: capitalize}';
         $style .= '#dokan-seller-listing-wrap.list-view .dokan-seller-wrap .dokan-single-seller .store-wrapper .store-content .store-data-container .store-data .dokan-seller-rating[class] {font-size: 14px}';
         $style .= '.store-lists-other-filter-wrap .dokan-geolocation-location-filters .location-address .locate-icon, .dokan-geolocation-location-filters .location-address .locate-loader {top: 40%;}';
-        $style .= '#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .store-ratings .stars a {border: none; margin: 0}';
+        $style .= '#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .store-ratings .dokan-stars i {border: none; margin: 0}';
         $style .= '#dokan-seller-listing-wrap .dokan-btn-theme.dokan-follow-store-button {text-transform: capitalize}';
 
         // responsive
@@ -127,7 +127,6 @@ class Dokan_Theme_Support_Flatsome {
         $style .= '}';
 
         wp_add_inline_style( 'dokan-style', $style );
-        wp_enqueue_style( 'woocommerce-general', WC()->plugin_url() . '/assets/css/woocommerce.css', '', WC_VERSION, 'all' );
     }
 
 }

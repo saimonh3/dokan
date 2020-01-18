@@ -1,21 +1,58 @@
+// dokan store listing filter wrap style resets
+#dokan-store-listing-filter-wrap,
+#dokan-store-listing-filter-wrap form,
+#dokan-store-listing-filter-form-wrap * {
+    padding: unset;
+    margin: unset;
+    box-sizing: border-box;
+    ul, ul li {
+        margin: unset;
+        padding: unset;
+    }
+    div p {
+        margin: unset;
+        padding: unset;
+        line-height: unset;
+    }
+    label,
+    input,
+    select,
+    textarea {
+        width: unset;
+        border: unset;
+        padding: unset;
+        margin: unset;
+        display: unset;
+        text-transform: unset;
+        font-weight: unset;
+        font-size: unset;
+        letter-spacing: unset;
+        box-shadow: unset;
+        box-sizing: border-box;
+    }
+}
+
 #dokan-store-listing-filter-wrap {
-    background: #ffffff;
+    background-color: #ffffff;
     padding: 20px;
     box-shadow: 1px 1px 20px 0px #E9E9E9;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
 
-    .left {
-        .store-count {
-            margin-top: 10px;
-        }
-    }
     .right {
         display: flex;
+        align-items: center;
 
         .item {
             position: relative;
+            white-space: nowrap;
+
+            &.sort-by {
+                margin: 0px 30px;
+            }
+
             .dokan-store-list-filter-button {
                 border-radius: 3px;
             }
@@ -23,8 +60,11 @@
             .dokan-icons {
                 position: absolute;
                 left: 14%;
-                top: 30%;
+                top: 50%;
                 cursor: pointer;
+                margin: 0;
+                padding: 0;
+                transform: translate(0, -50%);
 
                 .dokan-icon-div {
                     background: #fff;
@@ -45,10 +85,6 @@
                 }
             }
 
-            &:not(:first-child) {
-                padding-left: 40px;
-            }
-
             button {
                 padding-top: 8px;
                 padding-bottom: 8px;
@@ -62,7 +98,7 @@
 
             select {
                 background: #ffffff;
-                border-color: #edecec;
+                border: 1px solid #edecec;
                 -webkit-appearance: none;
                 -moz-appearance: none;
                 appearance: none;
@@ -79,8 +115,6 @@
         }
 
         .toggle-view {
-            margin-top: 8px;
-
             .dashicons {
                 font-size: 22px;
                 cursor: pointer;
@@ -96,16 +130,22 @@
 
 #dokan-store-listing-filter-form-wrap {
     background: #ffffff;
-    margin-top: 25px;
-    padding: 20px;
+    margin-top: 32px;
+    padding: 32px 20px 20px 20px;
     box-shadow: 1px 1px 20px 0px #E9E9E9;
+    position: relative;
+
+    div {
+        margin: 0;
+        padding: 0;
+    }
 
     &:before {
         content: "\f142";
-        position: relative;
-        top: -35px;
-        transform: translate(45%, 0);
-        left: 45%;
+        position: absolute;
+        top: -18px;
+        transform: translate(-50%, 0);
+        left: 50%;
         display: inline-block;
         -webkit-font-smoothing: antialiased;
         font-family: 'dashicons';
@@ -175,6 +215,27 @@
 
 #dokan-seller-listing-wrap {
 
+    .seller-listing-content {
+        .dokan-seller-wrap {
+            .dokan-single-seller {
+                .store-wrapper {
+                    .store-data {
+                        .dokan-seller-rating {
+                            i.dashicons {
+                                width: 15px;
+                                font-size: 17px;
+
+                                &.dashicons-star-filled, &.dashicons-star-half {
+                                    color: #fa9a00;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     &.grid-view {
 
         .store-wrapper {
@@ -202,7 +263,7 @@
                     top: 10px;
 
                     .featured-label {
-                        width: 80px;
+                        width: fit-content;
                         padding: 2px 10px;
                         background: #2d54a3;
                         color: #fff;
@@ -216,6 +277,10 @@
                         a {
                             color: #fff;
                             text-shadow: rgba(0, 0, 0, 0.8) 0 1px 0;
+                            font-size: 25px;
+                            padding: 0;
+                            margin: 0;
+                            text-decoration: none;
 
                             &:active,
                             &:focus {
@@ -224,10 +289,7 @@
                             }
                         }
                     }
-                    .star-rating {
-                        float: none;
-                        margin: 12px 0px 10px;
-
+                    .dokan-seller-rating {
                         &:before {
                             font-family: star;
                         }
@@ -314,6 +376,7 @@
                     padding: 0px 50px 0px 0px;
                     background: #fff;
                     border-radius: 3px;
+                    position: relative;
 
                     .store-header {
 
@@ -333,13 +396,14 @@
                         .store-data-container {
                             .featured-favourite {
                                 .featured-label {
-                                    width: 60px;
-                                    padding: 0px 5px;
+                                    padding: 2px 10px;
                                     background: #2d54a3;
                                     color: #fff;
                                     border-radius: 3px;
                                     box-shadow: 0px 0px 25px -5px #afafaf;
-                                    font-size: 12px;
+                                    position: absolute;
+                                    left: 8px;
+                                    top: 10px;
                                 }
                             }
 
@@ -351,6 +415,7 @@
 
                                     a {
                                         color: #000;
+                                        text-decoration: none;
 
                                         &:active,
                                         &:focus {
@@ -362,16 +427,14 @@
 
                                 .dokan-seller-rating[class] {
                                     overflow: visible;
-                                    left: 25%;
                                     z-index: 1;
-                                    top: -10px;
                                     min-width: 85px;
                                     font-family: 'Open Sans', sans-serif;
                                     color: gray;
-
-                                    p.rating {
-                                        margin-top: 22px;
-                                    }
+                                    float: right;
+                                    position: relative;
+                                    top: -15px;
+                                    left: 25%;
 
                                     &:before {
                                         font-family: star;
@@ -413,8 +476,8 @@
                     }
 
                     > div {
-                        flex-basis: 37.5%;
-                        max-width: 37.5%;
+                        flex-basis: 33.5%;
+                        max-width: 33.5%;
                         padding: 0 15px;
                     }
 

@@ -89,16 +89,20 @@
 
 @media (max-width: 767px) {
     #dokan-store-listing-filter-wrap {
+        display: block;
         .left {
             .store-count {
                 margin-top: -5px;
+                margin-bottom: 10px;
             }
         }
 
         .right {
+            justify-content: space-between;
+
             .item {
-                &:not(:first-child) {
-                    padding-left: 50px;
+                &.sort-by {
+                    margin: 0;
                 }
             }
         }
@@ -255,16 +259,7 @@
 @media (max-width: 430px) {
     #dokan-store-listing-filter-form-wrap {
         &:before {
-            left: -5%;
-        }
-
-        .right {
-            .item {
-                &:not(:first-child) {
-                    padding: 0;
-                    margin-left: 50px;
-                }
-            }
+            left: 20%;
         }
     }
 
@@ -466,10 +461,6 @@
     #dokan-store-listing-filter-wrap {
         .right {
             .item {
-                &:not(:first-child) {
-                    padding-left: 35px;
-                }
-
                 #stores_orderby {
                     padding: 8px 0px 8px 16px;
                 }
@@ -479,17 +470,6 @@
 }
 
 @media (max-width: 360px) {
-
-    #dokan-store-listing-filter-wrap {
-        .right {
-            .item {
-                &:not(:first-child) {
-                    padding-left: 20px;
-                }
-            }
-        }
-    }
-
     .dokan-single-store {
         .profile-frame {
             .profile-info-box.profile-layout-layout1 {
