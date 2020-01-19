@@ -56,6 +56,7 @@ class Dokan_Theme_Support_Enfold {
         $style .= '#dokan-store-listing-filter-wrap .right .item form.sort-by.item {display: inline-block}';
         $style .= '#top label {font-weight: normal; font-size: 14px}';
         $style .= '.template-page .entry-content-wrapper h2 a {text-transform: capitalize !important}';
+        $style .= '#dokan-seller-listing-wrap .dokan-single-seller .store-content .store-data-container .store-data {margin-top: 15px}';
 
         // responsive
         $style .= '@media (max-width: 414px) { #dokan-store-listing-filter-wrap .right .item .dokan-store-list-filter-button {margin: 0}';
