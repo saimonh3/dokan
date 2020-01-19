@@ -1,4 +1,27 @@
 // dokan store listing filter wrap style resets
+#dokan-seller-listing-wrap {
+    button {
+        margin: unset;
+        padding: 6px 12px;
+    }
+}
+
+#dokan-store-listing-filter-wrap, .store-lists-other-filter-wrap {
+    .left,
+    .right,
+    .item {
+        display: unset;
+        overflow: unset;
+        z-index: unset;
+        position: unset;
+        height: unset;
+        width: unset;
+        margin: unset;
+        padding: unset;
+        border: unset;
+    }
+}
+
 #dokan-store-listing-filter-wrap,
 #dokan-store-listing-filter-wrap form,
 #dokan-store-listing-filter-form-wrap * {
@@ -17,6 +40,10 @@
     label,
     input,
     select,
+    button,
+    a,
+    i,
+    span,
     textarea {
         width: unset;
         border: unset;
@@ -25,6 +52,7 @@
         display: unset;
         text-transform: unset;
         font-weight: unset;
+        line-height: unset;
         font-size: unset;
         letter-spacing: unset;
         box-shadow: unset;
@@ -184,7 +212,7 @@
             border-radius: 3px;
             background: #fff !important;
             color: #000 !important;
-            border-color: #edecec !important;
+            border: 1px solid #edecec !important;
             margin-right: 20px;
             display: none;
 
@@ -373,7 +401,7 @@
                     display: flex;
                     flex-wrap: wrap;
                     align-items: center;
-                    padding: 0px 50px 0px 0px;
+                    // padding: 0px 50px 0px 0px;
                     background: #fff;
                     border-radius: 3px;
                     position: relative;
@@ -384,7 +412,6 @@
                             min-height: 140px;
 
                             img {
-                                margin-left: -15px;
                                 border-top-left-radius: 3px;
                                 border-bottom-left-radius: 3px;
                             }
@@ -475,19 +502,19 @@
                         }
                     }
 
-                    > div {
-                        flex-basis: 33.5%;
-                        max-width: 33.5%;
-                        padding: 0 15px;
+                    > .store-content {
+                        flex-basis: 43%;
+                        padding-left: 4%;
                     }
 
                     .store-header {
-                        flex-basis: 25%;
+                        flex-basis: 20%;
                     }
 
                     .store-footer[class] {
                         display: flex;
                         flex-direction: row-reverse;
+                        flex-basis: 33%;
                         border: none;
                         text-align: right;
                         background: #fff;
